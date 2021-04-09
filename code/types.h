@@ -10,17 +10,17 @@ enum diftype {
 
 typedef struct types {
     char* string;
-    char single;
-    int number;
+    long number;
     double floats;
+    char single;
     enum diftype type;
 } Types;
 
-Types* init(enum diftype d);
-Types* initNumber(int n);
-Types* initChar(char n);
-Types* initString(char* n);
-Types* initFloat(double n);
+Types *init(enum diftype d);
+Types *initNumber(int n);
+Types *initChar(char n);
+Types *initString(char* n);
+Types *initFloat(double n);
 
 #endif
 

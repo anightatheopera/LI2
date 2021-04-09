@@ -2,7 +2,14 @@
  * @file Ficheiro que contém as funções que inicializam os diferentes tipos que a stack contém
  */
 #include "types.h"
+#include "stack.h"
 #include <stdlib.h>
+
+#define types(x) _Generic((x), \
+    char: 0,                   \
+    char *: 1,                 \
+    int: 2,                    \
+    double: 3                  )
 
 /**
  * Esta função inicializa a stack
@@ -22,8 +29,8 @@ Types* init(enum diftype d){
  *
  * @returns O tipo a ser entregue
  */
-Types* initNumber(int n){
-    Types* s = init(number);
+Types *initNumber(int n){
+    Types *s = init(number);
     s->number= n;
     return s;
 }
@@ -34,8 +41,8 @@ Types* initNumber(int n){
  *
  * @returns O tipo a ser entregue
  */
-Types* initChar(char n){
-    Types* s = init(single);
+Types *initChar(char n){
+    Types *s = init(single);
     s->single= n;
     return s;
 }
@@ -46,8 +53,8 @@ Types* initChar(char n){
  *
  * @returns O tipo a ser entregue
  */
-Types* initString(char* n){
-    Types* s = init(string);
+Types *initString(char* n){
+    Types *s = init(string);
     s->string = n;
     return s;
 }
@@ -58,8 +65,8 @@ Types* initString(char* n){
  *
  * @returns O tipo a ser entregue
  */
-Types* initFloat(double n){
-    Types* s = init(floats);
+Types *initFloat(double n){
+    Types *s = init(floats);
     s->floats = n;
     return s;
 }
