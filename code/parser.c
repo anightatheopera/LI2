@@ -1,5 +1,6 @@
 /** 
- * @file Este ficheiro contêm as funções relacionadas ao parser.
+ * @file parser.c
+ * @brief Este ficheiro contêm as funções relacionadas com a inicialização da stack.
  */
 
 #include <stdio.h>
@@ -12,16 +13,11 @@
 #include "convertions.h"
 #include "equations.h"
 
-
-/** 
- * \brief Esta é a função que vai fazer o parse de uma linha.
+/**
+ * @brief Lê a linha de input e iniciliza a stack com os valores de input
  *
- *
- * @param line Corresponde à linha que foi lida e da qual se vai fazer o parse.
- * \info Implementa expressões matemáticas de acordo com a leitura dos tokens (elementos do input)
- * 
+ * @param line Linha de input a ler
  */
-
 void parse(char *line) {
 	Stack *s = stackinit(100);
 

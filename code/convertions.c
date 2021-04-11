@@ -1,3 +1,9 @@
+/**
+ * @file convertions.c
+ * @brief Este ficheiro contem as funções de conversão de types
+ * 
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,16 +13,36 @@
 #include "types.h"
 #include "convertions.h"
 
+/**
+ * @brief Compara dos elementos da stack e retorna o elemento cujo type é maior
+ * 
+ * @param x Elemento da stack a comparar
+ * @param y Elemento da stack a comparar
+ * @return Types* Elemento cujo type é maior
+ */
 Types *max_type(Types *x, Types *y) {
     if (x->type > y->type) return x;
     else return y; 
 }
 
+/**
+ * @brief Compara dos elementos da stack e retorna o elemento cujo type é menor
+ * 
+ * @param x Elemento da stack a comparar
+ * @param y Elemento da stack a comparar
+ * @return Types* Elemento cujo type é menor
+ */
 Types *min_type(Types *x, Types *y) {
     if (x->type < y->type) return x;
     else return y; 
 }
 
+/**
+ * @brief Converte um elemento da stack para um type diferente
+ * 
+ * @param x Type a converter
+ * @param y Elemento a converter
+ */
 void converte(Diftypes x, Types *y) {
     char * str;
     int n;

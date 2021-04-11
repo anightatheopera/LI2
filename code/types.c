@@ -1,5 +1,6 @@
 /**
- * @file Ficheiro que contém as funções que inicializam os diferentes tipos que a stack contém
+ * @file types.c
+ * @brief Ficheiro que contém as funções que inicializam os diferentes tipos que a stack contém
  */
 #include "types.h"
 #include "stack.h"

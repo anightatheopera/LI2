@@ -1,5 +1,6 @@
 /**
- * @file Ficheiro que contém as funções principais da stack
+ * @file stack.c
+ * @brief Ficheiro que contém as funções principais de manipulação da stack
  */
 
 #include "stack.h"
@@ -48,6 +49,11 @@ void push(Stack *s, void *n){
     s->values[s->size++]= n;
 }
 
+/**
+ * @brief Imprime a stack
+ * 
+ * @param s A stack a imprimir
+ */
 void print_stack(Stack *s) {
   for(int K = 0; K < s->size; K++) {
     Types *elem = s->values[K];

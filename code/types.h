@@ -18,4 +18,3 @@ Types *initString(char*);
 Types *initFloat(double);
 
 #endif
-

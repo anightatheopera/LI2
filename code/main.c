@@ -1,5 +1,6 @@
 /** 
- * @file Este ficheiro contem a main do guiao 1.
+ * @file main.c
+ * @brief Este ficheiro contem a main do guiao 1.
  */
 
 #include <stdio.h>

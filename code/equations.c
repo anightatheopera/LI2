@@ -1,3 +1,8 @@
+/** 
+ * @file equations.c
+ * @brief Este ficheiro contem todas as equações a implementar na stack.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,6 +14,13 @@
 #include "types.h"
 #include "convertions.h"
 
+/**
+ * @brief Soma os dois elementos no topo da stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int plus_ops(Stack *s, char *token){
     if(strcmp (token, "+") == 0){
             Types *y = pop(s);
@@ -29,6 +41,14 @@ int plus_ops(Stack *s, char *token){
     }
     else return 0;
 }
+
+/**
+ * @brief Subtrai os dois elementos no topo da stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int minus_ops(Stack *s, char *token) {
 	if (strcmp(token, "-") == 0){
 		Types *y = pop(s);
@@ -50,6 +70,13 @@ int minus_ops(Stack *s, char *token) {
 	} else return 0;
 }
 
+/**
+ * @brief Multiplica os dois elementos no topo da stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int mult_ops(Stack *s, char *token){
 	if (strcmp (token, "*") == 0){       
 		Types *y = pop(s);
@@ -71,6 +98,13 @@ int mult_ops(Stack *s, char *token){
 	} else return 0;
 }
 
+/**
+ * @brief Divide os dois elementos no topo da stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int div_ops(Stack *s, char *token){
 	if (strcmp (token, "/") == 0) {       
 		Types *y = pop(s);
@@ -92,6 +126,13 @@ int div_ops(Stack *s, char *token){
 	} else return 0;
 }
 
+/**
+ * @brief Calcula o módulo dos dois elementos no topo da stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int mod_ops(Stack *s, char *token){	
 	if (strcmp (token, "%") == 0) {      
 		Types *y = pop(s);
@@ -102,34 +143,26 @@ int mod_ops(Stack *s, char *token){
 		converte(maxt->type, mint);
 
 		if (y->type == number)
-			push(s, initNumber(y->number % x->number));
-		//else if (y->type == floats)
-		//	push(s, initFloat(y->floats % x->floats));
+			push(s, initNumber(x->number % y->number));
+		//else if (x->type == floats)
+		//	push(s, initFloat(x->floats % y->floats));
 		else if (y->type == single)
-			push(s, initChar(y->single % x->single));
+			push(s, initChar(x->single % y->single));
 
 		return 1;
 
 	} else return 0;
 }
 
+/**
+ * @brief Decrementa o elemento no topo da stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int inc_ops(Stack *s, char *token){
 	if (strcmp (token, "(") == 0) {       
-		Types *y = pop(s);
-
-		if (y->type == number)
-			push(s, initNumber(y->number + 1));
-		else if (y->type == floats)
-			push(s, initFloat(y->floats + 1.0));
-		else if (y->type == single)
-			push(s, initChar(y->single + 1));
-
-		return 1;
-	} else return 0;
-}
-
-int dec_ops(Stack *s, char *token){
-	if (strcmp (token, ")") == 0) {      
 		Types *y = pop(s);
 
 		if (y->type == number)
@@ -138,12 +171,41 @@ int dec_ops(Stack *s, char *token){
 			push(s, initFloat(y->floats - 1.0));
 		else if (y->type == single)
 			push(s, initChar(y->single - 1));
+
+		return 1;
+	} else return 0;
+}
+
+/**
+ * @brief Incrementa o elemento no topo da stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
+int dec_ops(Stack *s, char *token){
+	if (strcmp (token, ")") == 0) {      
+		Types *y = pop(s);
+
+		if (y->type == number)
+			push(s, initNumber(y->number + 1));
+		else if (y->type == floats)
+			push(s, initFloat(y->floats + 1.0));
+		else if (y->type == single)
+			push(s, initChar(y->single + 1));
 		
 		return 1;
 
 	} else return 0;
 }
 
+/**
+ * @brief  Calcula a potência entre os dois elementos no topo da stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int pow_ops(Stack *s, char *token){
 	if (strcmp (token, "#") == 0) {       
 		Types *y = pop(s);
@@ -243,6 +305,13 @@ int or_ops(Stack *s, char *token){
 	} else return 0;
 }
 
+/**
+ * @brief Duplica o elemento no topo da stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int double_ops(Stack *s, char *token){
 	if (strcmp (token, "_") == 0) {
 		Types *y = pop(s);
@@ -267,6 +336,13 @@ int double_ops(Stack *s, char *token){
 	}else return 0;
 }
 
+/**
+ * @brief Retira o elemento no topo da stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int pop_ops(Stack *s, char *token){
 	if (strcmp (token, ";") == 0) {
 		pop(s);
@@ -275,6 +351,13 @@ int pop_ops(Stack *s, char *token){
 	} else return 0;
 }
 
+/**
+ * @brief Troca os dois elementos no topo da stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int swap2_ops(Stack *s, char *token){
 	if (strcmp (token, "\\") == 0) {
 		Types *y = pop(s);
@@ -299,6 +382,13 @@ int swap2_ops(Stack *s, char *token){
 	} else return 0;
 }
 
+/**
+ * @brief Troca os três elementos no topo da stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int swap3_ops(Stack *s, char *token){
 	if (strcmp (token, "@") == 0) {
 		Types *z = pop(s);
@@ -337,6 +427,13 @@ int swap3_ops(Stack *s, char *token){
 	} else return 0;
 }
 
+/**
+ * @brief Copia o n-ésimo elemento da stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int copy_n_ops(Stack *s, char *token){
 	if (strcmp (token, "$") == 0) {
 		Types *indice = pop(s);
@@ -353,6 +450,13 @@ int copy_n_ops(Stack *s, char *token){
 	} else return 0;
 }
 
+/**
+ * @brief Converte o elemento no topo da stack para inteiro
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int toInt(Stack *s, char *token){
 	if(strcmp("i", token)==0){
 		Types *y = pop(s);
@@ -364,6 +468,13 @@ int toInt(Stack *s, char *token){
 	} else return 0;
 }
 
+/**
+ * @brief Converte o elemento no topo da stack para float
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int toFloat(Stack *s, char *token){
     if(strcmp("f", token)==0){
         Types *y = pop(s);
@@ -375,6 +486,13 @@ int toFloat(Stack *s, char *token){
 	} else return 0;
 }
 
+/**
+ * @brief Converte o elemento no topo da stack para string
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int toString(Stack *s, char *token){
     if(strcmp("s", token)==0){
         Types *y = pop(s);
@@ -386,6 +504,13 @@ int toString(Stack *s, char *token){
 	} else return 0;
 }
 
+/**
+ * @brief Converte o elemento no topo da stack para char
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int toChar(Stack *s, char *token){
     if(strcmp("c", token)==0){
         Types *y = pop(s);
@@ -397,6 +522,13 @@ int toChar(Stack *s, char *token){
 	} else return 0;
 }
 
+/**
+ * @brief Imprime o elemento no topo da stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int print_top (Stack *s, char *token){
     if(strcmp("p", token)==0){
         Types *y = pop(s);
@@ -476,6 +608,13 @@ int stackAdderChar(Stack *s, char *token){
    
 }
 
+/**
+ * @brief Lê a próxima linha de input e acrescenta à stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int read_line (Stack *s, char *token){
 	char line[10240];
 
@@ -490,12 +629,18 @@ int read_line (Stack *s, char *token){
 	} else return 0;
 }
 
+/**
+ * @brief Lê todas as linhas de input e acrescenta à stack
+ * 
+ * @param s Stack
+ * @param token Caracter que ativa a função
+ * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int read_all(Stack *s, char *token){
 	char line[10240];
 
 	if(strcmp("t", token)==0){
 		assert( fgets(line, 10240, stdin) != NULL);
-		assert( line[strlen(line) - 1] == '\n'   );
 
 		while (line!=NULL) {
 		stackAdderChar(s,line);
@@ -503,14 +648,19 @@ int read_all(Stack *s, char *token){
 		stackAdderInt(s,line);
 
 		assert( fgets(line, 10240, stdin) != NULL);
-		assert( line[strlen(line) - 1] == '\n'   );
 		}
 		return 1;
 
 	} else return 0;
 }
 
-
+/**
+ * @brief Implementa as funções de cálculo, conversão e manipulação da stack
+ * 
+ * @param s Stack
+ * @param token Caracter de ativação de funções
+ * @return int Se realizar uma operação retorna 1, caso contrário retorna 0
+ */
 int compute_stack(Stack *s, char *token){
     if(plus_ops(s,token) == 1) return 1;
     if(minus_ops(s,token) == 1) return 1;
