@@ -1,1 +1,1 @@
-void parse(char *line);
+void parse(char *);

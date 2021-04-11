@@ -5,22 +5,16 @@
 #include "stack.h"
 #include <stdlib.h>
 
-#define types(x) _Generic((x), \
-    char: 0,                   \
-    char *: 1,                 \
-    int: 2,                    \
-    double: 3                  )
-
 /**
  * Esta função inicializa a stack
  * @param enum A enumeração dos diferentes tipos
  *
  * @returns O tipo a ser entregue
  */
-Types* init(enum diftype d){
-    Types* s = calloc(1, sizeof(Types));
-    s->type = d;
-    return s;
+Types *init(Diftypes d){
+    Types *elem = calloc (1, sizeof(Types));
+    elem->type = d;
+    return elem;
 }
 
 /**
@@ -30,9 +24,9 @@ Types* init(enum diftype d){
  * @returns O tipo a ser entregue
  */
 Types *initNumber(int n){
-    Types *s = init(number);
-    s->number= n;
-    return s;
+    Types *elem = init(number);
+    elem->number= n;
+    return elem;
 }
 
 /**
@@ -42,9 +36,9 @@ Types *initNumber(int n){
  * @returns O tipo a ser entregue
  */
 Types *initChar(char n){
-    Types *s = init(single);
-    s->single= n;
-    return s;
+    Types *elem = init(single);
+    elem->single= n;
+    return elem;
 }
 
 /**
@@ -54,9 +48,9 @@ Types *initChar(char n){
  * @returns O tipo a ser entregue
  */
 Types *initString(char* n){
-    Types *s = init(string);
-    s->string = n;
-    return s;
+    Types *elem = init(string);
+    elem->string = n;
+    return elem;
 }
 
 /**
@@ -66,7 +60,7 @@ Types *initString(char* n){
  * @returns O tipo a ser entregue
  */
 Types *initFloat(double n){
-    Types *s = init(floats);
-    s->floats = n;
-    return s;
+    Types *elem = init(floats);
+    elem->floats = n;
+    return elem;
 }

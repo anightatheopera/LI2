@@ -1,26 +1,21 @@
 #ifndef TYPES_H 
 #define TYPES_H
 
-enum diftype {
-    string,
-    single,
-    number,
-    floats
-};
+typedef enum { string = 4, single = 3, floats = 2, number = 1} Diftypes;
 
 typedef struct types {
+    Diftypes type;
     char* string;
     long number;
     double floats;
     char single;
-    enum diftype type;
 } Types;
 
-Types *init(enum diftype d);
-Types *initNumber(int n);
-Types *initChar(char n);
-Types *initString(char* n);
-Types *initFloat(double n);
+Types *init(Diftypes);
+Types *initNumber(int);
+Types *initChar(char);
+Types *initString(char*);
+Types *initFloat(double);
 
 #endif
 

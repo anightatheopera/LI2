@@ -13,10 +13,10 @@
  * @returns Uma stack inicializada
  */
 Stack *stackinit(int capacity){
-    Stack *s = calloc(1, sizeof(Stack));
+    Stack *s = (Stack *) calloc(1, sizeof(Stack));
     s->allocsize = capacity;
     s->size = 0;
-    s->values = calloc(capacity, sizeof(void*));
+    s->values = (void *) calloc(capacity, sizeof(void *));
     return s;
 }
 
@@ -25,7 +25,8 @@ Stack *stackinit(int capacity){
  * @param s A stack a alterar
  * 
  */
-Types *pop(Stack* s){
+
+void *pop(Stack* s){
     if (s->size <= 0) return NULL;
     else {
       s->size--; 
@@ -39,31 +40,28 @@ Types *pop(Stack* s){
  * @param n Elemento a adicionar
  *
  */
-void push(Stack *s, Types *n){
+void push(Stack *s, void *n){
     if(s->allocsize == s->size){
         s->allocsize *= 2;
-        s->values = realloc(s->values, s->allocsize* sizeof(Types *)); 
+        s->values = (void *) realloc(s->values, (s->allocsize + 1) * sizeof(void *)); 
     } 
     s->values[s->size++]= n;
 }
 
-Types *top(Stack *s) {
-  return s->values[s->size-1];
-}
-
 void print_stack(Stack *s) {
-  for(int k = 0; k < s->size; k++) {
-    Types *elem = s->values[k];
-    switch(elem->type) {
+  for(int K = 0; K < s->size; K++) {
+    Types *elem = s->values[K];
+    Diftypes type = elem->type;
+    switch(type) {
       case number:
-        printf(" %ld", elem->number); break;
+        printf("%ld", elem->number); break;
       case floats:
-        printf(" %g", elem->floats); break;
+        printf("%g", elem->floats); break;
       case single:
-        printf(" %c", elem->single); break;
+        printf("%c", elem->single); break;
       case string:
-        printf(" %s", elem->string); break;
+        printf("%s", elem->string); break;
     }
   }
-	printf("\n"); 
+  printf("\n");
 }

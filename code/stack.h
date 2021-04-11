@@ -4,15 +4,15 @@
 #include "types.h"
 
 typedef struct stack {
-    Types **values;
+    void **values;
     int allocsize;
     int size;
 } Stack;
 
 Stack *stackinit(int);
-Types *pop(Stack*);
-void push(Stack*, Types*);
-Types *top(Stack *);
+void *pop(Stack *);
+void push(Stack *, void *);
+void *top(Stack *);
 void print_stack(Stack *);
 
 #endif
