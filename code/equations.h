@@ -27,8 +27,9 @@ int toChar(Stack *, char*);
 int print_top(Stack *, char*);
 int stackAdderChar(Stack *, char*);
 int stackAdderFloat(Stack *, char*);
-int stackAdderNumber(Stack *, char*);
+int stackAdderInt(Stack *, char*);
 int read_line (Stack *, char *);
+int read_all(Stack *, char *);
 int compute_stack(Stack *, char *);
 
 #endif
