@@ -396,27 +396,14 @@ int pop_ops(Stack *s, char *token){
  * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
  */
 int swap2_ops(Stack *s, char *token){
-	if (strcmp (token, "\\") == 0) {
-		Types *y = pop(s);
-		Types *x = pop(s);
-
-		if (y->type == number)
-			push(s, initNumber(y->number));
-		else if (y->type == floats)
-			push(s, initFloat(y->floats));
-		else if (y->type == single)
-			push(s, initChar(y->single));
-
-		if (x->type == number)
-			push(s, initNumber(x->number));
-		else if (x->type == floats)
-			push(s, initFloat(x->floats));
-		else if (x->type == single)
-			push(s, initChar(x->single));
-
-		return 1;
-	
-	} else return 0;
+	if(strcmp("\\", token)==0){
+        Types* x = pop(s);
+        Types* y = pop(s);
+        push(s,x);
+        push(s,y);
+        return 1;
+    }
+    else return 0;
 }
 
 /**
@@ -427,41 +414,16 @@ int swap2_ops(Stack *s, char *token){
  * @return int Caso o token ative a função retorna 1, caso contrário retorna 0
  */
 int swap3_ops(Stack *s, char *token){
-	if (strcmp (token, "@") == 0) {
-		Types *z = pop(s);
-		Types *y = pop(s);
-		Types *x = pop(s);
-
-		if (y->type == number)
-			push(s, initNumber(y->number));
-		else if (y->type == floats)
-			push(s, initFloat(y->floats));
-		else if (y->type == single)
-			push(s, initChar(y->single));
-		else if (y->type ==string)
-			push(s, initString(y->string));
-
-		if (z->type == number)
-			push(s, initNumber(z->number));
-		else if (z->type == floats)
-			push(s, initFloat(z->floats));
-		else if (z->type == single)
-			push(s, initChar(z->single));
-		else if (y->type ==string)
-			push(s, initString(y->string));
-
-		if (x->type == number)
-			push(s, initNumber(x->number));
-		else if (x->type == floats)
-			push(s, initFloat(x->floats));
-		else if (x->type == single)
-			push(s, initChar(x->single));
-		else if (y->type ==string)
-			push(s, initString(y->string));
-
-		return 1;
-	
-	} else return 0;
+	if(strcmp("@", token)==0){
+        Types* x = pop(s);
+        Types* y = pop(s);
+        Types* z = pop(s);
+        push(s,y);
+        push(s,x);
+        push(s,z);
+        return 1;
+    }
+    else return 0;
 }
 
 /**
