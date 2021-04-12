@@ -352,20 +352,16 @@ int or_ops(Stack *s, char *token){
 int double_ops(Stack *s, char *token){
 	if (strcmp (token, "_") == 0) {
 		Types *y = pop(s);
-			if (y->type == number) {
-			push(s, initNumber(y->number));
-			push(s, initNumber(y->number));
-			} else if (y->type == floats) {
-			push(s, initFloat(y->floats));
-			push(s, initFloat(y->floats));
 
-		} else if (y->type == single) {
-			push(s, initChar(y->single));
-			push(s, initChar(y->single));
+		if (y->type == string){
+			Types *x = initString(y->string);
+			strcpy(x->string, y->string);
+			push(s, x);
+			push(s, y);
 
-		} else if (y->type == string) {
-			push(s, initString(y->string));
-			push(s, initString(y->string));
+		}else {
+			push(s, y);
+			push(s, y);
 		}
 
 		return 1;
@@ -399,6 +395,7 @@ int swap2_ops(Stack *s, char *token){
 	if(strcmp("\\", token)==0){
         Types* x = pop(s);
         Types* y = pop(s);
+
         push(s,x);
         push(s,y);
         return 1;
@@ -418,6 +415,7 @@ int swap3_ops(Stack *s, char *token){
         Types* x = pop(s);
         Types* y = pop(s);
         Types* z = pop(s);
+
         push(s,y);
         push(s,x);
         push(s,z);
@@ -438,12 +436,14 @@ int copy_n_ops(Stack *s, char *token){
 		Types *indice = pop(s);
 		Types *y = s->values[(s->size - 1) - indice->number];
 
-		if (y->type == number)
-			push(s, initNumber(y->number));
-		else if (y->type == floats)
-			push(s, initFloat(y->floats));
-		else if (y->type == single)
-			push(s, initChar(y->single));
+		if (y->type == string){
+			Types *x = initString(y->string);
+			strcpy(x->string, y->string);
+			push(s, x);
+
+		}else {
+			push(s, y);
+		}
 
 		return 1;
 	} else return 0;
@@ -535,23 +535,24 @@ int print_top (Stack *s, char *token){
 		switch(y->type) {
 			case number:
 				printf ("%ld\n", y->number);
-				push(s, initNumber(y->number));
+				push(s, y);
 				break;
 
 			case single:
 				printf ("%c\n", y->single);
-				push(s, initChar(y->single));
+				push(s, y);
 				break;
 
 			case string:
 				printf ("%s\n", y->string);
-				push(s, initString(y->string));
+				push(s, y);
 				break;
 
 			case floats:
 				printf ("%f\n", y->floats);
-				push(s, initFloat(y->floats));
+				push(s, y);
 				break;
+
 			default:
 				break;
 		}
