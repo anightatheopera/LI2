@@ -2,10 +2,15 @@
 #define STACK_H
 #include "types.h"
 
+/**
+ * Estrutura da stack
+ */
 typedef struct stack {
-    void **values;
-    int allocsize;
-    int size;
+    /*@{*/
+    void **values; /**< os valores que estão na stack*/
+    int allocsize; /**< o espaço alocado */
+    int size; /**< o espaço ocupado */
+    /*@{*/
 } Stack;
 
 Stack *stackinit(int);
