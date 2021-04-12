@@ -564,7 +564,7 @@ int print_top (Stack *s, char *token){
 /**
  * Esta função adiciona os números inteiros à stack quando recebe uma string
  * @param s A stack
- * @param str A string a converter
+ * @param token A string a converter
  * 
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
@@ -580,7 +580,7 @@ int stackAdderInt(Stack *s, char *token){
 /**
  * Esta função adiciona os números decimais à stack quando recebe uma string
  * @param s A stack
- * @param str A string a converter
+ * @param token A string a converter
  * 
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
@@ -595,7 +595,7 @@ int stackAdderFloat(Stack *s, char *token){
 /**
  * Esta função adiciona os caracteres à stack quando recebe uma string
  * @param s A stack
- * @param str A string a converter
+ * @param token A string a converter
  * 
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */

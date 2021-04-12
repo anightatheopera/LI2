@@ -8,7 +8,7 @@
 
 /**
  * Esta função inicializa a stack
- * @param enum A enumeração dos diferentes tipos
+ * @param d A enumeração dos diferentes tipos
  *
  * @returns O tipo a ser entregue
  */
@@ -20,7 +20,7 @@ Types *init(Diftypes d){
 
 /**
  * Esta função inicializa os números inteiros da stack
- * @param int Um número inteiro
+ * @param n Um número inteiro
  *
  * @returns O tipo a ser entregue
  */
@@ -32,7 +32,7 @@ Types *initNumber(int n){
 
 /**
  * Esta função inicializa os caracteres da stack
- * @param char Um caracter
+ * @param n Um caracter
  *
  * @returns O tipo a ser entregue
  */
@@ -44,7 +44,7 @@ Types *initChar(char n){
 
 /**
  * Esta função inicializa as strings da stack
- * @param char* Uma string
+ * @param n Uma string
  *
  * @returns O tipo a ser entregue
  */
@@ -56,7 +56,7 @@ Types *initString(char* n){
 
 /**
  * Esta função inicializa os números decimais da stack
- * @param float Um número decimal
+ * @param n Um número decimal
  *
  * @returns O tipo a ser entregue
  */
