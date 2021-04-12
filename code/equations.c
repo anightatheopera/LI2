@@ -227,6 +227,14 @@ int pow_ops(Stack *s, char *token){
 	} else return 0;
 }
 
+/**
+ * @brief Esta função aplica a função "and" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
+ * 
+ * @param s A stack
+ * @param str A string
+ *
+ * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
+ */
 int and_ops(Stack *s, char *token){
 	if (strcmp (token, "&") == 0) {       
 		Types *y = pop(s);
@@ -248,6 +256,16 @@ int and_ops(Stack *s, char *token){
 	} else return 0;
 }
 
+
+/**
+ * @brief Esta função aplica a função "xor" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
+ * 
+ * @param s A stack
+ * @param str A string a converter
+ * 
+ * 
+ * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
+ */
 int xor_ops(Stack *s, char* token){
 	if (strcmp (token, "^") == 0) {       
 		Types *y = pop(s);
@@ -269,6 +287,16 @@ int xor_ops(Stack *s, char* token){
 	} else return 0;
 }
 
+/**
+ * @brief Esta função aplica a função "not" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
+ * 
+ * @param s A stack
+ * @param str A string a converter
+ * 
+ * 
+ * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
+ */
+
 int not_ops(Stack *s, char *token){
 		if (strcmp (token, "~") == 0) {       
 			Types *y = pop(s);
@@ -285,6 +313,15 @@ int not_ops(Stack *s, char *token){
 		} else return 0;
 }
 
+/**
+ * @brief Esta função aplica a função "or" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
+ *
+ *  @param s A stack
+ * @param str A string a converter
+ * 
+ * 
+ * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
+ */
 int or_ops(Stack *s, char *token){
 	if (strcmp (token, "|") == 0) {       
 		Types *y = pop(s);

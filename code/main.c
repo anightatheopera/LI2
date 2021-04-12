@@ -10,6 +10,11 @@
 #include "stack.h"
 #include "parser.h"
 
+/**
+ * @brief Esta é a função principal do programa
+ * 
+ * @returns O valor 0
+ */
 int main(){
 	char line[10240];
 
