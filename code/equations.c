@@ -359,11 +359,17 @@ int double_ops(Stack *s, char *token){
 			push(s, x);
 			push(s, y);
 
-		}else {
-			push(s, y);
-			push(s, y);
-		}
+		}else if (y->type == number) {
+			push(s, initNumber(y->number));
 
+		}else if (y->type == single) {
+			push(s, initChar(y->single));
+		
+		}else if (y->type == floats) {
+			push(s, initFloat(y->floats));
+		
+		}
+		push(s, y);
 		return 1;
 	
 	}else return 0;
@@ -461,7 +467,7 @@ int toInt(Stack *s, char *token){
 		Types *y = pop(s);
 
 		converte (number, y);
-		push(s, initNumber(y->number));
+		push(s, y);
 		return 1;
 
 	} else return 0;
@@ -479,7 +485,7 @@ int toFloat(Stack *s, char *token){
         Types *y = pop(s);
 
 		converte (floats, y);
-		push(s, initFloat(y->floats));
+		push(s, y);
 		return 1;
 
 	} else return 0;
@@ -497,7 +503,7 @@ int toString(Stack *s, char *token){
         Types *y = pop(s);
 
 		converte (string, y);
-		push(s, initString(y->string));
+		push(s, y);
 		return 1;
 
 	} else return 0;
@@ -515,7 +521,7 @@ int toChar(Stack *s, char *token){
         Types *y = pop(s);
 
 		converte (single, y);
-		push(s, initChar(y->single));
+		push(s, y);
 		return 1;
 
 	} else return 0;
