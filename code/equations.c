@@ -660,6 +660,31 @@ int read_all(Stack *s, char *token){
 	} else return 0;
 }
 
+int var(Stack *s, char *token){
+	int i, x;
+	x = (int)token[0];
+
+	if ((x >= 65 && x <=90) || x == 83 || x == 79){
+		if (x == 78){
+			push(s, initChar('\n'));
+
+		}else if (x == 83){
+			push(s, initChar(' '));
+
+		}else if ((x >= 65 && x <= 87) && x != 83 && x != 79){
+			i = x - 55;
+			push(s, initNumber(i));
+
+		}else if ((x >= 88 && x <= 90) && x != 83 && x != 79){
+			i = x - 88;
+			push(s, initNumber(i));
+
+		} 
+		return 1;
+
+	} else return 0;
+}
+
 /**
  * @brief Implementa as funções de cálculo, conversão e manipulação da stack
  * 
@@ -691,6 +716,7 @@ int compute_stack(Stack *s, char *token){
 	if(toFloat(s,token) == 1) return 1;
 	if(print_top(s,token) == 1) return 1;
 	if(read_line(s,token) == 1) return 1;
+	if(var(s,token) == 1) return 1;
 	if(stackAdderInt(s,token) == 1) return 1;
     if(stackAdderFloat(s,token) == 1) return 1;
     if(stackAdderChar(s,token) == 1) return 1;

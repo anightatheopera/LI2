@@ -31,5 +31,6 @@ int stackAdderInt(Stack *, char*);
 int read_line (Stack *, char *);
 int read_all(Stack *, char *);
 int compute_stack(Stack *, char *);
+int var(Stack *, char *);
 
 #endif
