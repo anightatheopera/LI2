@@ -685,6 +685,203 @@ int var(Stack *s, char *token){
 	} else return 0;
 }
 
+int eq(Stack* s, char* token){
+	if (strcmp (token, "=") == 0) {       
+		Types *y = pop(s);
+		Types *x = pop(s);
+		Types *maxt = max_type(x, y);
+		Types *mint = min_type(x, y);
+
+		converte(maxt->type, mint);
+
+		if (y->type == number)
+			push(s, initNumber(y->number == x->number));
+		//else if (y->type == floats)
+		//	push(s, initFloat(y->floats & x->floats));
+		else if (y->type == single)
+			push(s, initChar(y->single == x->single));
+
+		return 1;
+	
+	} else return 0;
+}
+
+int lesser(Stack* s, char* token){
+	if (strcmp (token, "<") == 0) {       
+		Types *y = pop(s);
+		Types *x = pop(s);
+		Types *maxt = max_type(x, y);
+		Types *mint = min_type(x, y);
+
+		converte(maxt->type, mint);
+
+		if (y->type == number)
+			push(s, initNumber(y->number < x->number));
+		//else if (y->type == floats)
+		//	push(s, initFloat(y->floats & x->floats));
+		else if (y->type == single)
+			push(s, initChar(y->single < x->single));
+
+		return 1;
+	
+	} else return 0;
+}
+
+int bigger(Stack* s, char* token){
+	if (strcmp (token, ">") == 0) {       
+		Types *y = pop(s);
+		Types *x = pop(s);
+		Types *maxt = max_type(x, y);
+		Types *mint = min_type(x, y);
+
+		converte(maxt->type, mint);
+
+		if (y->type == number)
+			push(s, initNumber(y->number > x->number));
+		//else if (y->type == floats)
+		//	push(s, initFloat(y->floats & x->floats));
+		else if (y->type == single)
+			push(s, initChar(y->single > x->single));
+
+		return 1;
+	
+	} else return 0;
+}
+
+
+int not(Stack *s, char *token){
+		if (strcmp (token, "!") == 0) {       
+			Types *y = pop(s);
+
+			if (y->type == number)
+				push(s, initNumber(! y->number));
+			//else if (y->type == floats)
+			//	push(s, initFloat(~ y->floats));
+			else if (y->type == single)
+				push(s, initChar(! y->single));
+
+			return 1;
+
+		} else return 0;
+}
+
+int and(Stack* s, char* token){
+	if (strcmp (token, "e&") == 0) {       
+		Types *y = pop(s);
+		Types *x = pop(s);
+		Types *maxt = max_type(x, y);
+		Types *mint = min_type(x, y);
+
+		converte(maxt->type, mint);
+
+		if (y->type == number)
+			push(s, initNumber(y->number && x->number));
+		//else if (y->type == floats)
+		//	push(s, initFloat(y->floats & x->floats));
+		else if (y->type == single)
+			push(s, initChar(y->single && x->single));
+
+		return 1;
+	
+	} else return 0;
+}
+
+int or(Stack* s, char* token){
+	if (strcmp (token, "e|") == 0) {       
+		Types *y = pop(s);
+		Types *x = pop(s);
+		Types *maxt = max_type(x, y);
+		Types *mint = min_type(x, y);
+
+		converte(maxt->type, mint);
+
+		if (y->type == number)
+			push(s, initNumber(y->number || x->number));
+		//else if (y->type == floats)
+		//	push(s, initFloat(y->floats & x->floats));
+		else if (y->type == single)
+			push(s, initChar(y->single || x->single));
+
+		return 1;
+	
+	} else return 0;
+}
+
+int push_lesser(Stack* s, char* token){
+	if (strcmp (token, "e<") == 0) {       
+		Types *y = pop(s);
+		Types *x = pop(s);
+		Types *maxt = max_type(x, y);
+		Types *mint = min_type(x, y);
+
+		converte(maxt->type, mint);
+
+		if (y->type == number){
+			if (x<y) push(s, initNumber(x->number));
+			else push(s, initNumber(y->number));
+		//else if (y->type == floats)
+		//	push(s, initFloat(y->floats & x->floats));
+		}
+		else if (y->type == single){
+			if (x<y) push(s, initChar(x->single));
+			else push(s, initChar(y->single));
+		}
+		return 1;
+	
+	} else return 0;
+}
+
+
+int push_bigger(Stack* s, char* token){
+	if (strcmp (token, "e>") == 0) {       
+		Types *y = pop(s);
+		Types *x = pop(s);
+		Types *maxt = max_type(x, y);
+		Types *mint = min_type(x, y);
+
+		converte(maxt->type, mint);
+
+		if (y->type == number){
+			if (x>y) push(s, initNumber(x->number));
+			else push(s, initNumber(y->number));
+		//else if (y->type == floats)
+		//	push(s, initFloat(y->floats & x->floats));
+		}
+		else if (y->type == single){
+			if (x>y) push(s, initChar(x->single));
+			else push(s, initChar(y->single));
+		}
+		return 1;
+	
+	} else return 0;
+}
+
+int if_then_else(Stack* s, char* token){
+	if (strcmp (token, "?") == 0) {       
+		Types* z = pop(s);
+		Types* y = pop(s);
+		Types* x = pop(s);
+		Types *maxt = max_type(max_type(x, y), max_type(y,z));
+		Types *mint = min_type(min_type(x, y), min_type(y,z));
+
+		converte(maxt->type, mint);
+
+		if (y->type == number){
+			if (z) push(s,initNumber(y->number));
+			else push(s,initNumber(x->number));
+			
+		}
+		else if (y->type == single){
+			if (z) push(s,initChar(y->single));
+			else push(s,initChar(x->single));
+		}
+		return 1;
+
+	} else return 0;
+}
+
+
+
 /**
  * @brief Implementa as funções de cálculo, conversão e manipulação da stack
  * 
@@ -709,7 +906,16 @@ int compute_stack(Stack *s, char *token){
 	if(pop_ops(s,token) == 1) return 1; 
 	if(swap2_ops(s,token) == 1) return 1;
 	if(swap3_ops(s,token) == 1) return 1; 
-	if(copy_n_ops(s,token) == 1) return 1; 
+	if(copy_n_ops(s,token) == 1) return 1;
+	if(eq(s,token) == 1) return 1;
+	if(lesser(s,token) == 1) return 1;
+	if(bigger(s,token) == 1) return 1;
+	if(not(s,token) == 1) return 1;
+	if(or(s,token) == 1) return 1;
+	if(and(s,token) == 1) return 1; 
+	if(push_lesser(s,token) == 1) return 1; 
+	if(push_bigger(s,token) == 1) return 1; 
+	if(if_then_else(s,token) == 1) return 1; 
 	if(toInt(s,token) == 1) return 1;
 	if(toChar(s,token) == 1) return 1;
 	if(toString(s,token) == 1) return 1;
@@ -720,5 +926,6 @@ int compute_stack(Stack *s, char *token){
 	if(stackAdderInt(s,token) == 1) return 1;
     if(stackAdderFloat(s,token) == 1) return 1;
     if(stackAdderChar(s,token) == 1) return 1;
+	
     else return 0;
 }
