@@ -10,6 +10,7 @@ typedef struct stack {
     void **values; /**< os valores que estão na stack*/
     int allocsize; /**< o espaço alocado */
     int size; /**< o espaço ocupado */
+    void **var;
     /*@{*/
 } Stack;
 

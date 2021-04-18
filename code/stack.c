@@ -18,6 +18,7 @@ Stack *stackinit(int capacity){
     s->allocsize = capacity;
     s->size = 0;
     s->values = (void *) calloc(capacity, sizeof(void *));
+    s->var = (void *) calloc(capacity, sizeof(void *));
     return s;
 }
 

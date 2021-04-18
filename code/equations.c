@@ -266,7 +266,7 @@ int and_ops(Stack *s, char *token){
  * 
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
-int xor_ops(Stack *s, char* token){
+int xor_ops(Stack *s, char *token){
 	if (strcmp (token, "^") == 0) {       
 		Types *y = pop(s);
 		Types *x = pop(s);
@@ -659,45 +659,37 @@ int read_all(Stack *s, char *token){
 
 	} else return 0;
 }
-/*
+
 int new_var(Stack *s, char *token){
-	if(strcmp(':', token[0])==0){
-		Types *var;
-		var->type = single;
+	int x = (int)token[0] - 65;
+	Types *y = s->var[x];
 
-
+	if(token[0]==':'){
+		s->var[(int)token[1] - 65] = s->values[(s->size - 1)];
 		return 1;
-	}
-	else return 0;
-} */
-/**
- * @brief Lê variáveis e atribui os seus valores por omissão
- * 
- * @param s Stack
- * @param token Caracter que ativa a função (variável)
- * @return Caso o token ative a função retorna 1, caso contrário retorna 0
- */
-int init_var(Stack *s, char *token){
-	int x = (int)token[0];
 
-	if ((x >= 65 && x <=90) || x == 83 || x == 79){
-		if (x == 78){
+	} else if ((y == NULL) && x>=0 && x<=25){ 
+		if (x == 13){
 			push(s, initChar('\n'));
 
-		}else if (x == 83){
+		}else if (x == 18){
 			push(s, initChar(' '));
 
-		}else if ((x >= 65 && x <= 87) && x != 83 && x != 79){
-			x -= 55;
+		}else if ((x >= 0 && x <= 22) && x != 18 && x != 13){
+			x +=10;
 			push(s, initNumber(x));
 
-		}else if ((x >= 88 && x <= 90) && x != 83 && x != 79){
-			x -= 88;
+		}else if ((x >= 23 && x <= 25) && x != 18 && x != 13){
+			x -= 23;
 			push(s, initNumber(x));
 
 		} return 1;
 
-	} else return 0;
+	} else if (y != NULL) {
+		push(s, y);
+		return 1;
+	}
+	else return 0;
 }
 
 /**
@@ -709,7 +701,7 @@ int init_var(Stack *s, char *token){
  * 
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
-int eq(Stack* s, char* token){
+int eq(Stack *s, char *token){
 	if (strcmp (token, "=") == 0) {       
 		Types *y = pop(s);
 		Types *x = pop(s);
@@ -721,9 +713,9 @@ int eq(Stack* s, char* token){
 		if (y->type == number)
 			push(s, initNumber(y->number == x->number));
 		else if (y->type == floats)
-			push(s, initFloat(y->floats == x->floats));
+			push(s, initNumber(y->floats == x->floats));
 		else if (y->type == single)
-			push(s, initChar(y->single == x->single));
+			push(s, initNumber(y->single == x->single));
 
 		return 1;
 	
@@ -739,7 +731,7 @@ int eq(Stack* s, char* token){
  * 
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
-int lesser(Stack* s, char* token){
+int lesser(Stack *s, char *token){
 	if (strcmp (token, "<") == 0) {       
 		Types *y = pop(s);
 		Types *x = pop(s);
@@ -749,11 +741,11 @@ int lesser(Stack* s, char* token){
 		converte(maxt->type, mint);
 
 		if (y->type == number)
-			push(s, initNumber(y->number < x->number));
+			push(s, initNumber(y->number > x->number));
 		else if (y->type == floats)
-			push(s, initFloat(y->floats < x->floats));
+			push(s, initNumber(y->floats > x->floats));
 		else if (y->type == single)
-			push(s, initChar(y->single < x->single));
+			push(s, initNumber(y->single > x->single));
 
 		return 1;
 	
@@ -769,7 +761,7 @@ int lesser(Stack* s, char* token){
  * 
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
-int bigger(Stack* s, char* token){
+int bigger(Stack *s, char *token){
 	if (strcmp (token, ">") == 0) {       
 		Types *y = pop(s);
 		Types *x = pop(s);
@@ -779,11 +771,11 @@ int bigger(Stack* s, char* token){
 		converte(maxt->type, mint);
 
 		if (y->type == number)
-			push(s, initNumber(y->number > x->number));
+			push(s, initNumber(x->number > y->number));
 		else if (y->type == floats)
-			push(s, initFloat(y->floats > x->floats));
+			push(s, initNumber(x->floats > y->floats));
 		else if (y->type == single)
-			push(s, initChar(y->single > x->single));
+			push(s, initNumber(x->single > y->single));
 
 		return 1;
 	
@@ -806,9 +798,9 @@ int not(Stack *s, char *token){
 			if (y->type == number)
 				push(s, initNumber(! y->number));
 			else if (y->type == floats)
-				push(s, initFloat(! y->floats));
+				push(s, initNumber(! y->floats));
 			else if (y->type == single)
-				push(s, initChar(! y->single));
+				push(s, initNumber(! y->single));
 
 			return 1;
 
@@ -824,7 +816,7 @@ int not(Stack *s, char *token){
  * 
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
-int and(Stack* s, char* token){
+int and(Stack *s, char *token){
 	if (strcmp (token, "e&") == 0) {       
 		Types *y = pop(s);
 		Types *x = pop(s);
@@ -834,15 +826,15 @@ int and(Stack* s, char* token){
 		converte(maxt->type, mint);
 
 		if (y->type == number){
-			if ((x&&y) == x->number) push(s, initNumber(y->number));
+			if (x->number != '\0') push(s, initNumber(y->number));
 			else push(s, initNumber(x->number));
 
 		} else if (y->type == floats){
-			if ((x&&y) == x->floats) push(s, initFloat(y->floats));
+			if (x->floats != '\0') push(s, initFloat(y->floats));
 			else push(s, initFloat(x->floats));
 
 		} else if (y->type == single){
-			if ((x&&y) == x->single) push(s, initChar(y->single));
+			if (x->single != '\0') push(s, initChar(y->single));
 			else push(s, initChar(x->single));
 		}
 		return 1;
@@ -859,7 +851,7 @@ int and(Stack* s, char* token){
  * 
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
-int or(Stack* s, char* token){
+int or(Stack *s, char *token){
 	if (strcmp (token, "e|") == 0) {       
 		Types *y = pop(s);
 		Types *x = pop(s);
@@ -869,15 +861,15 @@ int or(Stack* s, char* token){
 		converte(maxt->type, mint);
 
 		if (y->type == number){
-			if ((x||y) == x->number) push(s, initNumber(x->number));
+			if (x->number != '\0') push(s, initNumber(x->number));
 			else push(s, initNumber(y->number));
 
 		} else if (y->type == floats){
-			if ((x||y) == x->floats) push(s, initFloat(x->floats));
+			if (x->floats != '\0') push(s, initFloat(x->floats));
 			else push(s, initFloat(y->floats));
 
 		} else if (y->type == single){
-			if ((x||y) == x->single) push(s, initChar(x->single));
+			if (x->single != '\0') push(s, initChar(x->single));
 			else push(s, initChar(y->single));
 		}
 		return 1;
@@ -894,7 +886,7 @@ int or(Stack* s, char* token){
  * 
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
-int push_lesser(Stack* s, char* token){
+int push_lesser(Stack *s, char *token){
 	if (strcmp (token, "e<") == 0) {       
 		Types *y = pop(s);
 		Types *x = pop(s);
@@ -930,7 +922,7 @@ int push_lesser(Stack* s, char* token){
  * 
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
-int push_bigger(Stack* s, char* token){
+int push_bigger(Stack *s, char *token){
 	if (strcmp (token, "e>") == 0) {       
 		Types *y = pop(s);
 		Types *x = pop(s);
@@ -966,27 +958,30 @@ int push_bigger(Stack* s, char* token){
  * 
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
-int if_then_else(Stack* s, char* token){
+int if_then_else(Stack *s, char *token){
 	if (strcmp (token, "?") == 0) {       
 		Types* z = pop(s);
 		Types* y = pop(s);
 		Types* x = pop(s);
 		Types *maxt = max_type(max_type(x, y), max_type(y,z));
-		Types *mint = min_type(min_type(x, y), min_type(y,z));
 
-		converte(maxt->type, mint);
+		converte(maxt->type, x);
+		converte(maxt->type, y);
+		converte(maxt->type, z);
 
 		if (y->type == number){
-			if (x) push(s,initNumber(y->number));
+			if (x->number != '\0') push(s,initNumber(y->number));
 			else push(s,initNumber(z->number));
 			
-		}
-		else if (y->type == single){
-			if (x) push(s,initChar(y->single));
+		} else if (y->type == single){
+			if (x->single != '\0') push(s,initChar(y->single));
 			else push(s,initChar(z->single));
-		}
-		return 1;
 
+		} else if (y->type == floats){
+			if (x->floats != '\0') push(s,initFloat(y->floats));
+			else push(s,initFloat(z->floats));
+
+		} return 1;
 	} else return 0;
 }
 
@@ -1024,7 +1019,7 @@ int compute_stack(Stack *s, char *token){
 	if(push_lesser(s,token) == 1) return 1; 
 	if(push_bigger(s,token) == 1) return 1; 
 	if(if_then_else(s,token) == 1) return 1;
-	if(var(s,token) == 1) return 1;
+	if(new_var(s,token) == 1) return 1;
 	if(toInt(s,token) == 1) return 1;
 	if(toChar(s,token) == 1) return 1;
 	if(toString(s,token) == 1) return 1;
