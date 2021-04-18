@@ -660,6 +660,15 @@ int read_all(Stack *s, char *token){
 	} else return 0;
 }
 
+/**
+ * @brief Esta função cobre os casos de o input ser uma variável
+ * 
+ * @param s A stack
+ * @param token A string a converter
+ * 
+ * 
+ * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
+ */
 int new_var(Stack *s, char *token){
 	int x = (int)token[0] - 65;
 	Types *y = s->var[x];
