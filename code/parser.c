@@ -27,7 +27,11 @@ char *get_token(char *line, char **rest) {
     for(i=0; line[i]!='\n' && line[i]!='\0' && line[i]!=' ' && line[i]!='\t' && i<size; i++)
       token[i] = line[i];
     
-    if (token[0] == '\0') token = NULL;
+    if (token[0] == '\0') {
+      token = NULL;
+      free(token);
+    }
+
     *rest = &line[i];
 
     return token;
@@ -47,6 +51,7 @@ void parse(char *line) {
     line = &(*rest);
     rest = NULL;
     compute_stack(s, token);
+    free(token);
 }
 	print_stack(s);
 	free(s);
