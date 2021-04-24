@@ -26,6 +26,7 @@ int toString(Stack *, char*);
 int toChar(Stack *, char*);
 int print_top(Stack *, char*);
 int stackAdderChar(Stack *, char*);
+int stackAdderString(Stack *, char*);
 int stackAdderFloat(Stack *, char*);
 int stackAdderInt(Stack *, char*);
 int read_line (Stack *, char *);

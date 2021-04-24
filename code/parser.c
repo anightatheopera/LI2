@@ -13,6 +13,26 @@
 #include "convertions.h"
 #include "equations.h"
 
+
+char *get_token(char *line, char **rest) {
+    int i=0;
+    int size = strlen(line);
+    char *token = calloc(size, sizeof(char));
+    
+    if (line[0] == ' ') {
+      for ( i=0; i<size; i++) line[i] = line[i+1];
+      line[i] = '\0';
+    }
+    
+    for(i=0; line[i]!='\n' && line[i]!='\0' && line[i]!=' ' && line[i]!='\t' && i<size; i++)
+      token[i] = line[i];
+    
+    if (token[0] == '\0') token = NULL;
+    *rest = &line[i];
+
+    return token;
+}
+
 /**
  * @brief Lê a linha de input e iniciliza a stack com os valores de input
  *
@@ -20,17 +40,14 @@
  */
 void parse(char *line) {
 	Stack *s = stackinit(100);
+  char *token;
+  char *rest = NULL;
 
-	for(char *token = strtok(line, " \t\n"); token != NULL; token = strtok(NULL, " \t\n")){
-		
-		char *sobra;
-		int val_i = strtol(token, &sobra, 10);
-
-		if(strlen (sobra) == 0)
-			push(s, initNumber(val_i));
-
-		else compute_stack(s, token);
-	}
+  while((token = get_token(line, &rest))) {
+    line = &(*rest);
+    rest = NULL;
+    compute_stack(s, token);
+}
 	print_stack(s);
 	free(s);
 }

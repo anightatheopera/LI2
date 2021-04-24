@@ -36,6 +36,12 @@ int plus_ops(Stack *s, char *token){
                 push(s, initFloat(y->floats + x->floats));
             else if (y->type == single)
                 push(s, initChar(y->single + x->single));
+			else if (y->type == string) {
+				int size = strlen(x->string) + strlen(y->string);
+
+				for(int i = strlen(x->string), j=0; i <= size; i++, j++) x->string[i] = y->string[j];
+				push(s, initString(x->string));
+			}
 
             return 1;
     }
@@ -92,7 +98,17 @@ int mult_ops(Stack *s, char *token){
 			push(s, initFloat(y->floats * x->floats));
 		else if (y->type == single)
 			push(s, initChar(y->single * x->single));
+		else if (y->type == string){
+			int size = strlen(x->string);
+			char new[size + y->number];
 
+			converte (number, y);
+			for(int j = 0; j < y->number; j++) {
+				for (int i = 0; i < size; i++) new[j*size + i] = x->string[i];
+			}
+			if (y->number == 0) new[0] = '\0';
+			push(s, initString(new));
+		}
 		return 1;
 		
 	} else return 0;
@@ -171,6 +187,13 @@ int inc_ops(Stack *s, char *token){
 			push(s, initFloat(y->floats - 1.0));
 		else if (y->type == single)
 			push(s, initChar(y->single - 1));
+		else if (y->type == string) {
+			int size = strlen(y->string), i = 0;
+			for (i = 0; i < size-1; i++) y->string[i] = y->string[i+1];
+			y->string[i] = '\0';
+			push(s, initString(y->string));
+			push(s, initChar(y->string[0]));
+		}
 
 		return 1;
 	} else return 0;
@@ -193,7 +216,12 @@ int dec_ops(Stack *s, char *token){
 			push(s, initFloat(y->floats + 1.0));
 		else if (y->type == single)
 			push(s, initChar(y->single + 1));
-		
+		else if (y->type == string) {
+			int size = strlen(y->string);
+			y->string[size-1] = '\0';
+			push(s, initString(y->string));
+			push(s, initChar(y->string[size-1]));
+		}		
 		return 1;
 
 	} else return 0;
@@ -221,6 +249,11 @@ int pow_ops(Stack *s, char *token){
 			push(s, initFloat(pow (x->floats, y->floats)));
 		else if (y->type == single)
 			push(s, initChar(pow (x->single, y->single)));
+		else if (y->type == string) {
+			char *substring = strstr(x->string, y->string);
+			if (substring != NULL) push(s, initNumber(substring - x->string));
+			else push(s, initNumber(-1));
+		}
 	
 		return 1;
 	
@@ -612,6 +645,15 @@ int stackAdderChar(Stack *s, char *token){
     }
     else return 0;
    
+
+}
+int stackAdderString(Stack *s, char *token){
+    if(strlen(token)>1){
+        push(s, initString(token));
+        return 1;
+    }
+    else return 0;
+   
 }
 
 /**
@@ -630,6 +672,7 @@ int read_line (Stack *s, char *token){
 		stackAdderChar(s,line);
 		stackAdderFloat(s,line);
 		stackAdderInt(s,line);
+		stackAdderString(s,line);
 		return 1;
 
 	} else return 0;
@@ -652,6 +695,7 @@ int read_all(Stack *s, char *token){
 		stackAdderChar(s,line);
 		stackAdderFloat(s,line);
 		stackAdderInt(s,line);
+		stackAdderString(s,line);
 
 		assert( fgets(line, 10240, stdin) != NULL);
 		}
@@ -725,7 +769,10 @@ int eq(Stack *s, char *token){
 			push(s, initNumber(y->floats == x->floats));
 		else if (y->type == single)
 			push(s, initNumber(y->single == x->single));
-
+		else if (y->type == string) {
+			converte(number, y);
+			push(s, initChar(x->string[y->number]));
+		}
 		return 1;
 	
 	} else return 0;
@@ -755,6 +802,12 @@ int lesser(Stack *s, char *token){
 			push(s, initNumber(y->floats > x->floats));
 		else if (y->type == single)
 			push(s, initNumber(y->single > x->single));
+		else if (y->type == string) {
+			char new[y->number];
+			converte(number, y);
+			for (int i=0; i<y->number; i++) new[i] = x->string[i];
+			push(s, initString(new));
+		}
 
 		return 1;
 	
@@ -785,6 +838,13 @@ int bigger(Stack *s, char *token){
 			push(s, initNumber(x->floats > y->floats));
 		else if (y->type == single)
 			push(s, initNumber(x->single > y->single));
+		else if (y->type == string) {
+			char new[y->number];
+			int size = strlen(x->string);
+			converte(number, y);
+			for (int i=size-y->number, j = 0; i<size; i++, j++) new[j] = x->string[i];
+			push(s, initString(new));
+		}
 
 		return 1;
 	
@@ -1038,6 +1098,7 @@ int compute_stack(Stack *s, char *token){
 	if(stackAdderInt(s,token) == 1) return 1;
     if(stackAdderFloat(s,token) == 1) return 1;
     if(stackAdderChar(s,token) == 1) return 1;
+	if(stackAdderString(s,token) == 1) return 1;
 	
     else return 0;
 }
