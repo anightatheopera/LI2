@@ -654,10 +654,11 @@ int read_line (Stack *s, char *token){
 
     if(strcmp("l", token)==0){
 		assert( fgets(line, 10240, stdin) != NULL);
+		line[strlen(line)-1] = '\0';
 
-		if (stackAdderChar(s,line) == 1) return 1;
-		if (stackAdderFloat(s,line) == 1) return 1;
 		if (stackAdderInt(s,line) == 1) return 1;
+		if (stackAdderFloat(s,line) == 1) return 1;
+		if (stackAdderChar(s,line) == 1) return 1;
 		if (stackAdderString(s,line) == 1) return 1;
 		return 1;
 
@@ -672,15 +673,15 @@ int read_line (Stack *s, char *token){
  * @return Caso o token ative a função retorna 1, caso contrário retorna 0
  */
 int read_all(Stack *s, char *token){
-	char line[10240];
+	char *line = calloc(127, sizeof(char));
 
     if(strcmp("t", token)==0){
-		assert( fgets(line, 10240, stdin) != NULL);
 
-		while (line[0]!='\n') {
-			stackAdderString(s,line);
-			assert( fgets(line, 10240, stdin) != NULL);
+		while(scanf("%[^\n]%*c",line) == 1) {
+			push(s, initString(line));
+			line = calloc(127, sizeof(char));
 		}
+		free(line);
 		return 1;
 
 	} else return 0;
@@ -1179,6 +1180,6 @@ int compute_stack(Stack *s, char *token){
 	if(stackAdderInt(s,token) == 1) return 1;
     if(stackAdderFloat(s,token) == 1) return 1;
     if(stackAdderChar(s,token) == 1) return 1;
-	if(stackAdderString(s,token) == 1) return 1;
+	//if(stackAdderString(s,token) == 1) return 1;
     else return 0;
 }

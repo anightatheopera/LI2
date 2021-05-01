@@ -1,6 +1,6 @@
 /** 
  * @file parser.c
- * @brief Este ficheiro contêm as funções relacionadas com a inicialização da stack.
+ * Este ficheiro contêm as funções relacionadas com a inicialização da stack.
  */
 
 #include <stdio.h>
@@ -15,7 +15,7 @@
 
 
 /**
- * @brief Separa o token do resto do input
+ * Separa o token do resto do input
  * 
  * @param line Linha de input
  * @param rest Resto da linha
@@ -37,7 +37,7 @@ char *get_token(char *line, char **rest) {
 }
 
 /**
- * @brief Separa e devolve a parte do input que está delimitada por "\"\"" (string) ou por "[]" (array)
+ * Separa e devolve a parte do input que está delimitada por "\"\"" (string) ou por "[]" (array)
  * 
  * @param line Linha de input
  * @param seps Separadores "\"\"" ou "[]"
@@ -57,7 +57,7 @@ char *get_delimited(char *line, char *seps, char **rest) {
 }
 
 /**
- * @brief Lê a linha de input e iniciliza a stack com os valores de input
+ * Lê a linha de input e iniciliza a stack com os valores de input
  *
  * @param line Linha de input a ler
  */
