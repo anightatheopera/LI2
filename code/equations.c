@@ -392,7 +392,15 @@ int double_ops(Stack *s, char *token){
 			strcpy(x->string, y->string);
 			push(s, x);
 
-		}else push(s, y);
+		} else if (y->type == number) {
+			push(s, initNumber(y->number));
+
+		} else if (y->type == single) {
+			push(s, initChar(y->single));
+		
+		} else if (y->type == floats) {
+			push(s, initFloat(y->floats));
+		}
 		
 		push(s, y);
 		return 1;
