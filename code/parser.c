@@ -14,27 +14,47 @@
 #include "equations.h"
 
 
+/**
+ * @brief Separa o token do resto do input
+ * 
+ * @param line Linha de input
+ * @param rest Resto da linha
+ * @return Devolve o token
+ */
 char *get_token(char *line, char **rest) {
     int i=0;
     int size = strlen(line);
     char *token = calloc(size, sizeof(char));
     
-    if (line[0] == ' ') {
-      for ( i=0; i<size; i++) line[i] = line[i+1];
-      line[i] = '\0';
-    }
-    
-    for(i=0; line[i]!='\n' && line[i]!='\0' && line[i]!=' ' && line[i]!='\t' && i<size; i++)
+  for(i=0; line[i]!='\n' && line[i]!='\0' && line[i]!=' ' && line[i]!='\t' && i<size; i++)
       token[i] = line[i];
-    
-    if (token[0] == '\0') {
-      token = NULL;
-      free(token);
-    }
+  //token[i] = '\0';
 
-    *rest = &line[i];
+  if (token[0] == '\0') token = NULL;
 
-    return token;
+  *rest = &line[i+1];
+
+   return token;
+}
+
+/**
+ * @brief Separa e devolve a parte do input que está delimitada por "\"\"" (string) ou por "[]" (array)
+ * 
+ * @param line Linha de input
+ * @param seps Separadores "\"\"" ou "[]"
+ * @param rest Resto da linha
+ * @return Devolve o token como string ou array
+ */
+char *get_delimited(char *line, char *seps, char **rest) {
+  int i, j;
+  int size = strlen(line);
+  char *token = calloc(size, sizeof(char));
+
+  for(i=1, j=0; line[i] != seps[1]; j++, i++) token[j] = line[i];
+  token[j] = '\0';
+
+  *rest = &line[i+1];
+  return token;
 }
 
 /**
@@ -47,12 +67,30 @@ void parse(char *line) {
   char *token;
   char *rest = NULL;
 
-  while((token = get_token(line, &rest))) {
+  while (line != NULL) {
+
+    while ((line[0] == ' ' || line[0] == '\n') && line[1] != '\0') line++;
+
+    if (line[0] == '\"') {
+      token = get_delimited(line, "\"\"", &rest);
+      if (token != NULL) stackAdderString(s, token);
+
+
+    //}else if (line[0] == '[') {
+    //  token = get_delimited(line, "[]", &rest);
+    //  stackAdderArray?
+    
+    } else {
+      token = get_token(line, &rest);
+      if (token != NULL) compute_stack(s, token);
+
+    }
+
     line = &(*rest);
     rest = NULL;
-    compute_stack(s, token);
-    free(token);
-}
+    if (token == NULL || line[0] == '\0' || line[0] == '\n') line = NULL;
+
+  }
 	print_stack(s);
 	free(s);
 }

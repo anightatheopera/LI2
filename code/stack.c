@@ -56,10 +56,10 @@ void push(Stack *s, void *n){
  * @param s A stack a imprimir
  */
 void print_stack(Stack *s) {
-  for(int K = 0; K < s->size; K++) {
-    Types *elem = s->values[K];
-    Diftypes type = elem->type;
-    switch(type) {
+  for(int k = 0; k < s->size; k++) {
+    Types *elem = s->values[k];
+    Diftypes t = elem->type;
+    switch(t) {
       case number:
         printf("%ld", elem->number); break;
       case floats:

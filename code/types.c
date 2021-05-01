@@ -5,7 +5,7 @@
 #include "types.h"
 #include "stack.h"
 #include <stdlib.h>
-
+#include <stdio.h>
 /**
  * Esta função inicializa a stack
  * @param d A enumeração dos diferentes tipos
@@ -48,7 +48,7 @@ Types *initChar(char n){
  *
  * @returns O tipo a ser entregue
  */
-Types *initString(char* n){
+Types *initString(char *n){
     Types *elem = init(string);
     elem->string = n;
     return elem;
