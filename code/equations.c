@@ -39,7 +39,7 @@ int plus_ops(Stack *s, char *token){
 			else if (y->type == string) {
 				int size = strlen(x->string) + strlen(y->string);
 				for(int i = strlen(x->string), j=0; i <= size; i++, j++) x->string[i] = y->string[j];
-				push(s, initString(x->string));
+				push(s, x);
 			}
 
             return 1;
@@ -189,11 +189,10 @@ int inc_ops(Stack *s, char *token){
 		else if (y->type == single)
 			push(s, initChar(y->single - 1));
 		else if (y->type == string) {
-			int size = strlen(y->string), i = 0;
-			for (i = 0; i < size-1; i++) y->string[i] = y->string[i+1];
-			y->string[i] = '\0';
-			push(s, initString(y->string));
-			push(s, initChar(y->string[0]));
+			char c = y->string[0];
+			y->string++;
+			push(s, y);
+			push(s, initChar(c));
 		}
 
 		return 1;
@@ -219,9 +218,10 @@ int dec_ops(Stack *s, char *token){
 			push(s, initChar(y->single + 1));
 		else if (y->type == string) {
 			int size = strlen(y->string);
+			char c = y->string[size-1];
 			y->string[size-1] = '\0';
-			push(s, initString(y->string));
-			push(s, initChar(y->string[size-1]));
+			push(s, y);
+			push(s, initChar(c));
 		}		
 		return 1;
 
@@ -546,7 +546,7 @@ int toChar(Stack *s, char *token){
 
 /**
  * Imprime o elemento no topo da stack
- * 
+ *-
  * @param s Stack
  * @param token Caracter que ativa a função
  * @return Caso o token ative a função retorna 1, caso contrário retorna 0
@@ -828,7 +828,7 @@ int bigger(Stack *s, char *token){
 
 		if(y->type==number && x->type==string) {
 			x->string += ((int)strlen(x->string)-y->number);
-			push(s, initString(x->string));
+			push(s, x);
 		}
 		else {
 			converte(maxt->type, mint);
@@ -1108,8 +1108,7 @@ int range (Stack *s, char *token){
 int white_space (Stack *s, char *token){
 	if (strcmp (token, "S/") == 0) {
 		Types *y = pop(s);
-		y->string = strtok(y->string, " ");
-		push(s, y);
+		push(s, strtok(y->string, " "));
 		return 1;
 	}
 	else return 0;
@@ -1126,8 +1125,7 @@ int white_space (Stack *s, char *token){
 int newlines (Stack *s, char *token){
 	if (strcmp (token, "N/") == 0) {
 		Types *y = pop(s);
-		y->string = strtok(y->string, "\n");
-		push(s, y);
+		push(s, strtok(y->string, "\n"));
 		return 1;
 	}
 	else return 0;
@@ -1165,6 +1163,7 @@ int compute_stack(Stack *s, char *token){
 	if(or(s,token) == 1) return 1;
 	if(and(s,token) == 1) return 1; 
 	if(range(s,token) == 1) return 1;
+	if(newlines(s,token) == 1) return 1;
 	if(white_space(s,token) == 1) return 1;
 	if(push_lesser(s,token) == 1) return 1; 
 	if(push_bigger(s,token) == 1) return 1; 
