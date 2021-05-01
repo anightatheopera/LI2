@@ -17,7 +17,6 @@ typedef struct stack {
 Stack *stackinit(int);
 void *pop(Stack *);
 void push(Stack *, void *);
-void *top(Stack *);
 void print_stack(Stack *);
 
 #endif

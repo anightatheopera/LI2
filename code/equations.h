@@ -31,15 +31,16 @@ int stackAdderFloat(Stack *, char*);
 int stackAdderInt(Stack *, char*);
 int read_line (Stack *, char *);
 int read_all(Stack *, char *);
+int range(Stack *, char *);
 int new_var(Stack *, char *);
-int eq(Stack* s, char* token);
-int lesser(Stack* s, char* token);
-int bigger(Stack* s, char* token);
-int not(Stack *s, char *token);
-int and(Stack* s, char* token);
-int or(Stack* s, char* token);
-int push_lesser(Stack* s, char* token);
-int push_bigger(Stack* s, char* token);
+int eq(Stack *, char *);
+int lesser(Stack *, char *);
+int bigger(Stack *, char *);
+int not(Stack *, char *);
+int and(Stack *, char *);
+int or(Stack *, char *);
+int push_lesser(Stack *, char *);
+int push_bigger(Stack *, char *);
 int compute_stack(Stack *, char *);
 
 
