@@ -22,13 +22,12 @@
  * @return Devolve o token
  */
 char *get_token(char *line, char **rest) {
-    int i=0;
+    int i;
     int size = strlen(line);
     char *token = calloc(size, sizeof(char));
     
   for(i=0; line[i]!='\n' && line[i]!='\0' && line[i]!=' ' && line[i]!='\t' && i<size; i++)
       token[i] = line[i];
-  //token[i] = '\0';
 
   if (token[0] == '\0') token = NULL;
 
@@ -46,12 +45,12 @@ char *get_token(char *line, char **rest) {
  * @return Devolve o token como string ou array
  */
 char *get_delimited(char *line, char *seps, char **rest) {
-  int i, j;
+  int i;
   int size = strlen(line);
   char *token = calloc(size, sizeof(char));
 
-  for(i=1, j=0; line[i] != seps[1]; j++, i++) token[j] = line[i];
-  token[j] = '\0';
+  for(i=1; line[i] != seps[1]; i++) token[i-1] = line[i];
+  token[i-1] = '\0';
 
   *rest = &line[i+1];
   return token;

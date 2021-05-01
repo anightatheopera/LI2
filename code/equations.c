@@ -1,6 +1,6 @@
 /** 
  * @file equations.c
- * @brief Este ficheiro contem todas as equações a implementar na stack.
+ * Este ficheiro contem todas as equações a implementar na stack.
  */
 
 #include <stdio.h>
@@ -15,7 +15,7 @@
 #include "convertions.h"
 
 /**
- * @brief Soma os dois elementos no topo da stack
+ * Soma os dois elementos no topo da stack
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -38,7 +38,6 @@ int plus_ops(Stack *s, char *token){
                 push(s, initChar(y->single + x->single));
 			else if (y->type == string) {
 				int size = strlen(x->string) + strlen(y->string);
-
 				for(int i = strlen(x->string), j=0; i <= size; i++, j++) x->string[i] = y->string[j];
 				push(s, initString(x->string));
 			}
@@ -49,7 +48,7 @@ int plus_ops(Stack *s, char *token){
 }
 
 /**
- * @brief Subtrai os dois elementos no topo da stack
+ * Subtrai os dois elementos no topo da stack
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -77,7 +76,7 @@ int minus_ops(Stack *s, char *token) {
 }
 
 /**
- * @brief Multiplica os dois elementos no topo da stack
+ * Multiplica os dois elementos no topo da stack
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -115,7 +114,7 @@ int mult_ops(Stack *s, char *token){
 }
 
 /**
- * @brief Divide os dois elementos no topo da stack
+ * Divide os dois elementos no topo da stack, no caso de strings é feita a separação do segundo elemento pela string no topo da stack
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -136,6 +135,8 @@ int div_ops(Stack *s, char *token){
 			push(s, initFloat(x->floats / y->floats));
 		else if (y->type == single)
 			push(s, initChar(x->single / y->single));
+		else if (y->type == string)
+			push(s, initString(strtok(x->string, y->string)));
 		
 		return 1;
 
@@ -143,7 +144,7 @@ int div_ops(Stack *s, char *token){
 }
 
 /**
- * @brief Calcula o módulo dos dois elementos no topo da stack
+ * Calcula o módulo dos dois elementos no topo da stack
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -171,7 +172,7 @@ int mod_ops(Stack *s, char *token){
 }
 
 /**
- * @brief Decrementa o elemento no topo da stack
+ * Decrementa o elemento no topo da stack
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -200,7 +201,7 @@ int inc_ops(Stack *s, char *token){
 }
 
 /**
- * @brief Incrementa o elemento no topo da stack
+ * Incrementa o elemento no topo da stack
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -228,7 +229,7 @@ int dec_ops(Stack *s, char *token){
 }
 
 /**
- * @brief  Calcula a potência entre os dois elementos no topo da stack
+ *  Calcula a potência entre os dois elementos no topo da stack
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -261,7 +262,7 @@ int pow_ops(Stack *s, char *token){
 }
 
 /**
- * @brief Esta função aplica a função "and" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
+ * Esta função aplica a função "and" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
  * 
  * @param s A stack
  * @param token A string
@@ -291,7 +292,7 @@ int and_ops(Stack *s, char *token){
 
 
 /**
- * @brief Esta função aplica a função "xor" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
+ * Esta função aplica a função "xor" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
  * 
  * @param s A stack
  * @param token A string a converter
@@ -321,7 +322,7 @@ int xor_ops(Stack *s, char *token){
 }
 
 /**
- * @brief Esta função aplica a função "not" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
+ * Esta função aplica a função "not" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
  * 
  * @param s A stack
  * @param token A string a converter
@@ -347,7 +348,7 @@ int not_ops(Stack *s, char *token){
 }
 
 /**
- * @brief Esta função aplica a função "or" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
+ * Esta função aplica a função "or" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
  *
  *  @param s A stack
  * @param token A string a converter
@@ -376,7 +377,7 @@ int or_ops(Stack *s, char *token){
 }
 
 /**
- * @brief Duplica o elemento no topo da stack
+ * Duplica o elemento no topo da stack
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -391,16 +392,8 @@ int double_ops(Stack *s, char *token){
 			strcpy(x->string, y->string);
 			push(s, x);
 
-		}else if (y->type == number) {
-			push(s, initNumber(y->number));
-
-		}else if (y->type == single) {
-			push(s, initChar(y->single));
+		}else push(s, y);
 		
-		}else if (y->type == floats) {
-			push(s, initFloat(y->floats));
-		
-		}
 		push(s, y);
 		return 1;
 	
@@ -408,7 +401,7 @@ int double_ops(Stack *s, char *token){
 }
 
 /**
- * @brief Retira o elemento no topo da stack
+ * Retira o elemento no topo da stack
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -423,7 +416,7 @@ int pop_ops(Stack *s, char *token){
 }
 
 /**
- * @brief Troca os dois elementos no topo da stack
+ * Troca os dois elementos no topo da stack
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -442,7 +435,7 @@ int swap2_ops(Stack *s, char *token){
 }
 
 /**
- * @brief Troca os três elementos no topo da stack
+ * Troca os três elementos no topo da stack
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -463,7 +456,7 @@ int swap3_ops(Stack *s, char *token){
 }
 
 /**
- * @brief Copia o n-ésimo elemento da stack
+ * Copia o n-ésimo elemento da stack
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -480,7 +473,7 @@ int copy_n_ops(Stack *s, char *token){
 }
 
 /**
- * @brief Converte o elemento no topo da stack para inteiro
+ * Converte o elemento no topo da stack para inteiro
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -490,7 +483,7 @@ int toInt(Stack *s, char *token){
 	if(strcmp("i", token)==0){
 		Types *y = pop(s);
 
-		converte (number, y);
+		conv_int(y);
 		push(s, y);
 		return 1;
 
@@ -498,7 +491,7 @@ int toInt(Stack *s, char *token){
 }
 
 /**
- * @brief Converte o elemento no topo da stack para float
+ * Converte o elemento no topo da stack para float
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -508,7 +501,7 @@ int toFloat(Stack *s, char *token){
     if(strcmp("f", token)==0){
         Types *y = pop(s);
 
-		converte (floats, y);
+		conv_float(y);
 		push(s, y);
 		return 1;
 
@@ -516,7 +509,7 @@ int toFloat(Stack *s, char *token){
 }
 
 /**
- * @brief Converte o elemento no topo da stack para string
+ * Converte o elemento no topo da stack para string
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -526,7 +519,7 @@ int toString(Stack *s, char *token){
     if(strcmp("s", token)==0){
         Types *y = pop(s);
 
-		converte (string, y);
+		conv_string(y);
 		push(s, y);
 		return 1;
 
@@ -534,7 +527,7 @@ int toString(Stack *s, char *token){
 }
 
 /**
- * @brief Converte o elemento no topo da stack para char
+ * Converte o elemento no topo da stack para char
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -544,7 +537,7 @@ int toChar(Stack *s, char *token){
     if(strcmp("c", token)==0){
         Types *y = pop(s);
 
-		converte (single, y);
+		conv_char(y);
 		push(s, y);
 		return 1;
 
@@ -552,7 +545,7 @@ int toChar(Stack *s, char *token){
 }
 
 /**
- * @brief Imprime o elemento no topo da stack
+ * Imprime o elemento no topo da stack
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -565,26 +558,23 @@ int print_top (Stack *s, char *token){
 		switch(y->type) {
 			case number:
 				printf ("%ld\n", y->number);
-				push(s, y);
 				break;
 
 			case single:
 				printf ("%c\n", y->single);
-				push(s, y);
 				break;
 
 			case string:
 				printf ("%s\n", y->string);
-				push(s, y);
 				break;
 
 			case floats:
 				printf ("%f\n", y->floats);
-				push(s, y);
 				break;
 
 			default:
 				break;
+			push(s, y);
 		}
 		return 1;
 
@@ -645,9 +635,7 @@ int stackAdderChar(Stack *s, char *token){
  * @return Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
 int stackAdderString(Stack *s, char *token){
-	int size = strlen(token);
-
-    if(size >= 1) {
+    if(strlen(token) >= 1) {
 		push(s, initString(token));
         return 1;
     }
@@ -655,7 +643,7 @@ int stackAdderString(Stack *s, char *token){
 }
 
 /**
- * @brief Lê a próxima linha de input e acrescenta à stack
+ * Lê a próxima linha de input e acrescenta à stack
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
@@ -677,26 +665,29 @@ int read_line (Stack *s, char *token){
 }
 
 /**
- * @brief Lê todas as linhas de input e acrescenta à stack como strings
+ * Lê todas as linhas de input e acrescenta à stack como strings
  * 
  * @param s Stack
  * @param token Caracter que ativa a função
  * @return Caso o token ative a função retorna 1, caso contrário retorna 0
  */
 int read_all(Stack *s, char *token){
-	char *line;
+	char line[10240];
 
     if(strcmp("t", token)==0){
-		line = fgets(line, 10240, stdin);
+		assert( fgets(line, 10240, stdin) != NULL);
 
-		while (line!=NULL && stackAdderString(s,line) == 1) line = fgets(line, 10240, stdin);
+		while (line[0]!='\n') {
+			stackAdderString(s,line);
+			assert( fgets(line, 10240, stdin) != NULL);
+		}
 		return 1;
 
 	} else return 0;
 }
 
 /**
- * @brief Esta função cobre os casos de o input ser uma variável
+ * Esta função cobre os casos de o input ser uma variável
  * 
  * @param s A stack
  * @param token A string a converter
@@ -737,7 +728,7 @@ int new_var(Stack *s, char *token){
 }
 
 /**
- * @brief Esta função aplica a função de igualdade aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma. Caso, o elemento no topo da stack seja um number (y) e o seguinte seja uma string/array, devolve elemento de indice (y) da string/array
+ * Esta função aplica a função de igualdade aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma. Caso, o elemento no topo da stack seja um number (y) e o seguinte seja uma string/array, devolve elemento de indice (y) da string/array
  * 
  * @param s A stack
  * @param token A string a converter
@@ -765,12 +756,8 @@ int eq(Stack *s, char *token){
 			else if (y->type == single)
 				push(s, initNumber(y->single == x->single));
 			else if (y->type == string) {
-				int i=0, flag=0;
-				for(i=0; x->string[i]!='\0'; i++) {
-					if (y->string[i] == x->string[i]) flag = 1;
-					else flag = 0;
-				}
-				if (strlen(y->string) != strlen(x->string)) flag = 0;
+				int flag = 0;
+				if (strcmp(y->string, x->string) == 0) flag = 1;
 				push(s, initNumber(flag));
 			}
 		}
@@ -780,7 +767,7 @@ int eq(Stack *s, char *token){
 }
 
 /**
- * @brief Esta função aplica a função de menor aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma. Caso, o elemento no topo da stack seja um number (y) e o seguinte seja uma string/array, devolve os primeiros (y) elementos da string/array
+ * Esta função aplica a função de menor aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma. Caso, o elemento no topo da stack seja um number (y) e o seguinte seja uma string/array, devolve os primeiros (y) elementos da string/array
  * 
  * @param s A stack
  * @param token A string a converter
@@ -797,8 +784,9 @@ int lesser(Stack *s, char *token){
 
 		if (y->type==number && x->type==string) {
 			char new[y->number];
-			converte(number, y);
-			for (int i=0; i<y->number; i++) new[i] = x->string[i];
+			int i;
+			for (i=0; i<y->number; i++) new[i] = x->string[i];
+			new[i] = '\0';
 			push(s, initString(new));
 		}
 		else {
@@ -811,7 +799,9 @@ int lesser(Stack *s, char *token){
 			else if (y->type == single)
 				push(s, initNumber(y->single > x->single));
 			else if (y->type == string) {
-				push(s, initNumber((int)strlen(y->string) > (int)strlen(x->string)));
+				int flag = 0;
+				if (strcmp(x->string, y->string) < 0) flag = 1;
+				push(s, initNumber(flag));
 			}
 		}
 		return 1;
@@ -820,7 +810,7 @@ int lesser(Stack *s, char *token){
 }
 
 /**
- * @brief Esta função aplica a função de maior aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma. Caso, o elemento no topo da stack seja um number (y) e o seguinte seja uma string/array, devolve os ultimos (y) elementos da string/array
+ * Esta função aplica a função de maior aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma. Caso, o elemento no topo da stack seja um number (y) e o seguinte seja uma string/array, devolve os ultimos (y) elementos da string/array
  * 
  * @param s A stack
  * @param token Caracter que ativa a função
@@ -836,11 +826,8 @@ int bigger(Stack *s, char *token){
 		Types *mint = min_type(x, y);
 
 		if(y->type==number && x->type==string) {
-			char new[y->number];
-			int size = strlen(x->string);
-			converte(number, y);
-			for (int i=size-y->number, j = 0; i<size; i++, j++) new[j] = x->string[i];
-			push(s, initString(new));
+			x->string += ((int)strlen(x->string)-y->number);
+			push(s, initString(x->string));
 		}
 		else {
 			converte(maxt->type, mint);
@@ -852,7 +839,9 @@ int bigger(Stack *s, char *token){
 			else if (y->type == single)
 				push(s, initNumber(x->single > y->single));
 			else if (y->type == string) {
-				push(s, initNumber((int)strlen(y->string) <= (int)strlen(x->string)));
+				int flag = 0;
+				if (strcmp(x->string, y->string) > 0) flag = 1;
+				push(s, initNumber(flag));
 			}
 		}
 		return 1;
@@ -861,7 +850,7 @@ int bigger(Stack *s, char *token){
 }
 
 /**
- * @brief Esta função aplica a função de "not" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
+ * Esta função aplica a função de "not" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
  * 
  * @param s A stack
  * @param token A string a converter
@@ -886,7 +875,7 @@ int not(Stack *s, char *token){
 }
 
 /**
- * @brief Esta função aplica a função "and" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
+ * Esta função aplica a função "and" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
  * 
  * @param s A stack
  * @param token Caracter que ativa a função
@@ -904,20 +893,20 @@ int and(Stack *s, char *token){
 		converte(maxt->type, mint);
 
 		if (y->type == number){
-			if (x->number != '\0') push(s, initNumber(y->number));
-			else push(s, initNumber(x->number));
+			if (x->number != '\0') push(s, y);
+			else push(s, x);
 
 		} else if (y->type == floats){
-			if (x->floats != '\0') push(s, initFloat(y->floats));
-			else push(s, initFloat(x->floats));
+			if (x->floats != '\0') push(s, y);
+			else push(s, x);
 
 		} else if (y->type == single){
-			if (x->single != '\0') push(s, initChar(y->single));
-			else push(s, initChar(x->single));
+			if (x->single != '\0') push(s, y);
+			else push(s, x);
 
 		} else if (y->type == string){
-			if (x->string != NULL) push(s, initString(y->string));
-			else push(s, initString(x->string));
+			if (x->string != NULL) push(s, y);
+			else push(s, x);
 		}
 		return 1;
 	
@@ -925,7 +914,7 @@ int and(Stack *s, char *token){
 }
 
 /**
- * @brief Esta função aplica a função "or" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
+ * Esta função aplica a função "or" aos dois últimos elementos da stack e, se conseguir, adiciona-o à mesma
  * 
  * @param s A stack
  * @param token Caracter que ativa a função
@@ -943,20 +932,20 @@ int or(Stack *s, char *token){
 		converte(maxt->type, mint);
 
 		if (y->type == number){
-			if (x->number != '\0') push(s, initNumber(x->number));
-			else push(s, initNumber(y->number));
+			if (x->number != '\0') push(s, x);
+			else push(s, y);
 
 		} else if (y->type == floats){
-			if (x->floats != '\0') push(s, initFloat(x->floats));
-			else push(s, initFloat(y->floats));
+			if (x->floats != '\0') push(s, x);
+			else push(s, y);
 
 		} else if (y->type == single){
-			if (x->single != '\0') push(s, initChar(x->single));
-			else push(s, initChar(y->single));
+			if (x->single != '\0') push(s, x);
+			else push(s, y);
 
 		} else if (y->type == string){
-			if (x->string != NULL) push(s, initString(x->string));
-			else push(s, initString(y->string));
+			if (x->string != NULL) push(s, x);
+			else push(s, y);
 		}
 		return 1;
 	
@@ -964,7 +953,7 @@ int or(Stack *s, char *token){
 }
 
 /**
- * @brief Esta função aplica a função de menor aos dois últimos elementos da stack e adiciona à stack o menor elemento
+ * Esta função aplica a função de menor aos dois últimos elementos da stack e adiciona à stack o menor elemento
  * 
  * @param s A stack
  * @param token Caracter que ativa a função
@@ -982,21 +971,21 @@ int push_lesser(Stack *s, char *token){
 		converte(maxt->type, mint);
 
 		if (y->type == number){
-			if (x->number < y->number) push(s, initNumber(x->number));
-			else push(s, initNumber(y->number));
+			if (x->number < y->number) push(s, x);
+			else push(s, y);
 
 		}else if (y->type == floats) {
-			if (x->floats < y->floats) push(s, initFloat(x->floats));
-			else push(s, initFloat(y->floats));
+			if (x->floats < y->floats) push(s, x);
+			else push(s, y);
 
 		}
 		else if (y->type == single){
-			if (x->floats < y->floats) push(s, initChar(x->single));
-			else push(s, initChar(y->single));
+			if (x->floats < y->floats) push(s, x);
+			else push(s, y);
 
 		} else if (y->type == string){
-			if (strlen(x->string) < strlen(y->string)) push(s, initString(x->string));
-			else push(s, initString(y->string));
+			if (strcmp(x->string, y->string) < 0) push(s, x);
+			else push(s, y);
 		}
 		return 1;
 	
@@ -1004,7 +993,7 @@ int push_lesser(Stack *s, char *token){
 }
 
 /**
- * @brief Esta função aplica a função de maior aos dois últimos elementos da stack e adiciona à stack o maior elemento
+ * Esta função aplica a função de maior aos dois últimos elementos da stack e adiciona à stack o maior elemento
  * 
  * @param s A stack
  * @param token Caracter que ativa a função
@@ -1022,20 +1011,20 @@ int push_bigger(Stack *s, char *token){
 		converte(maxt->type, mint);
 
 		if (y->type == number){
-			if (x->number > y->number) push(s, initNumber(x->number));
-			else push(s, initNumber(y->number));
+			if (x->number > y->number) push(s, x);
+			else push(s, y);
 
 		} else if (y->type == floats) {
-			if (x->floats > y->floats) push(s, initFloat(x->floats));
-			else push(s, initFloat(y->floats));
+			if (x->floats > y->floats) push(s, x);
+			else push(s, y);
 
 		} else if (y->type == single){
-			if (x->floats > y->floats) push(s, initChar(x->single));
-			else push(s, initChar(y->single));
+			if (x->floats > y->floats) push(s, x);
+			else push(s, y);
 
 		} else if (y->type == string){
-			if (strlen(x->string) > strlen(y->string)) push(s, initString(y->string));
-			else push(s, initString(x->string));
+			if ((strcmp(x->string, y->string) > 0)) push(s, x);
+			else push(s, y);
 		}
 		return 1;
 	
@@ -1043,7 +1032,7 @@ int push_bigger(Stack *s, char *token){
 }
 
 /**
- * @brief Esta função aplica a função de condição ao elementos da stack
+ * Esta função aplica a função de condição ao elementos da stack
  * 
  * @param s A stack
  * @param token Caracter que ativa a função
@@ -1057,33 +1046,32 @@ int if_then_else(Stack *s, char *token){
 		Types* y = pop(s);
 		Types* x = pop(s);
 		Types *maxt = max_type(max_type(x, y), max_type(y,z));
-
 		converte(maxt->type, x);
 		converte(maxt->type, y);
 		converte(maxt->type, z);
+		
 
-		if (y->type == number){
-			if (x->number != '\0') push(s,initNumber(y->number));
-			else push(s,initNumber(z->number));
+		if (x->type == number){
+			if (x->number != '\0') push(s, y);
+			else push(s,z);
 			
-		} else if (y->type == single){
-			if (x->single != '\0') push(s,initChar(y->single));
-			else push(s,initChar(z->single));
+		} else if (x->type == single){
+			if (x->single != '\0') push(s,y);
+			else push(s,z);
 
-		} else if (y->type == floats){
-			if (x->floats != '\0') push(s,initFloat(y->floats));
-			else push(s,initFloat(z->floats));
+		} else if (x->type == floats){
+			if (x->floats != '\0') push(s,y);
+			else push(s,z);
 
 		} return 1;
 	} else return 0;
 }
 
 /**
- * @brief Caso o elemento no topo da stack seja um number, devolve um array com o range de elementos do 0 até ao elemento no topo da stack, caso seja uma string devolve o seu tamanho
+ * Caso o elemento no topo da stack seja um number, devolve um array com o range de elementos do 0 até ao elemento no topo da stack, caso seja uma string devolve o seu tamanho
  * 
  * @param s A stack
  * @param token Caracter que ativa a função
- * 
  * 
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
@@ -1109,7 +1097,43 @@ int range (Stack *s, char *token){
 }
 
 /**
- * @brief Implementa as funções de cálculo, conversão e manipulação da stack
+ * Separa a string do topo da stack por um whitespace
+ * 
+ * @param s A Stack
+ * @param token Caracter que ativa a função
+ * 
+ * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
+ */
+int white_space (Stack *s, char *token){
+	if (strcmp (token, "S/") == 0) {
+		Types *y = pop(s);
+		y->string = strtok(y->string, " ");
+		push(s, y);
+		return 1;
+	}
+	else return 0;
+}
+
+/**
+ * Separa a string do topo da stack por um newlines
+ * 
+ * @param s A Stack
+ * @param token Caracter que ativa a função
+ * 
+ * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
+ */
+int newlines (Stack *s, char *token){
+	if (strcmp (token, "N/") == 0) {
+		Types *y = pop(s);
+		y->string = strtok(y->string, "\n");
+		push(s, y);
+		return 1;
+	}
+	else return 0;
+}
+
+/**
+ * Implementa as funções de cálculo, conversão e manipulação da stack
  * 
  * @param s Stack
  * @param token Caracter de ativação de funções
@@ -1139,7 +1163,8 @@ int compute_stack(Stack *s, char *token){
 	if(not(s,token) == 1) return 1;
 	if(or(s,token) == 1) return 1;
 	if(and(s,token) == 1) return 1; 
-	if(range(s,token) == 1) return 1; 
+	if(range(s,token) == 1) return 1;
+	if(white_space(s,token) == 1) return 1;
 	if(push_lesser(s,token) == 1) return 1; 
 	if(push_bigger(s,token) == 1) return 1; 
 	if(if_then_else(s,token) == 1) return 1;
