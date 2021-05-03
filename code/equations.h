@@ -40,7 +40,13 @@ int not(Stack *, char *);
 int and(Stack *, char *);
 int or(Stack *, char *);
 int push_lesser(Stack *, char *);
-int push_bigger(Stack *, char *);
+int arithmetic(Stack *, char *);
+int logic(Stack *, char *);
+int stack_man(Stack *, char *);
+int arrays_strings(Stack *, char *);
+int blocks(Stack *, char *);
+int input_output(Stack *, char *);
+int convertions(Stack *, char *);
 int compute_stack(Stack *, char *);
 
 

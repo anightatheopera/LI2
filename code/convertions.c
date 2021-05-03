@@ -9,8 +9,6 @@
 #include <string.h>
 #include <math.h>
 #include "stack.h"
-#include "parser.h"
-#include "types.h"
 #include "convertions.h"
 
 /**

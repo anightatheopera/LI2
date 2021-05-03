@@ -10,8 +10,6 @@
 #include <assert.h>
 #include <math.h>
 #include "stack.h"
-#include "parser.h"
-#include "types.h"
 #include "convertions.h"
 
 /**
@@ -288,7 +286,7 @@ int and_ops(Stack *s, char *token){
 		return 1;
 	
 	} else return 0;
-}
+} 
 
 
 /**
@@ -1140,6 +1138,97 @@ int newlines (Stack *s, char *token){
 }
 
 /**
+ * @brief Implementa as funções de cálculo aritmético
+ * 
+ * @param s A stack
+ * @param token Caracter de ativação das funções
+ * 
+ * @return Se conseguir adicionar retorna 1, caso contrário retorna 0
+ */
+int arithmetic (Stack *s, char *token){
+	if(plus_ops(s,token) == 1 || minus_ops(s,token) == 1 || mult_ops(s,token) == 1 || div_ops(s,token) == 1 || mod_ops(s,token) == 1 || inc_ops(s,token) == 1 || dec_ops(s,token) == 1 || pow_ops(s,token) == 1) return 1;
+	else return 0;
+}
+
+/**
+ * @brief Implementa as funções de cálculo lógico
+ * 
+ * @param s A stack
+ * @param token Caracter de ativação das funções
+ * 
+ * @return Se conseguir adicionar retorna 1, caso contrário retorna 0
+ */
+int logic (Stack *s, char *token){
+	if(and_ops(s,token) == 1 || or_ops(s,token) == 1 || xor_ops(s,token) == 1 || not_ops(s,token) == 1 || eq(s,token) == 1 || lesser(s,token) == 1 || bigger(s,token) == 1 || not(s,token) == 1 || or(s,token) == 1 || and(s,token) == 1 || push_lesser(s,token) == 1 || push_bigger(s,token) == 1 || if_then_else(s,token) == 1)
+		return 1;
+	else return 0; 
+}
+
+/**
+ * @brief Implementa as funções de manipulação da stack
+ * 
+ * @param s A stack
+ * @param token Caracter de ativação das funções
+ * 
+ * @return Se conseguir adicionar retorna 1, caso contrário retorna 0
+ */
+int stack_man (Stack *s, char *token){
+	if(double_ops(s,token) == 1 || pop_ops(s,token) == 1 || swap2_ops(s,token) == 1 || swap3_ops(s,token) == 1 || copy_n_ops(s,token) == 1 || new_var(s,token) == 1 || stackAdderInt(s,token) == 1 || stackAdderFloat(s,token) == 1 || stackAdderChar(s,token) == 1) return 1;
+	else return 0;
+}
+
+/**
+ * @brief Implementa as funções de manipulação de arrays/strings
+ * 
+ * @param s A stack
+ * @param token Caracter de ativação das funções
+ * 
+ * @return Se conseguir adicionar retorna 1, caso contrário retorna 0
+ */
+int arrays_strings (Stack *s, char *token) {
+	if(range(s,token) == 1 || newlines(s,token) == 1 || white_space(s,token) == 1) return 1;
+	else return 0;
+}
+
+/**
+ * @brief Implementa as funções de aplicação de blocos
+ * 
+ * @param s A stack
+ * @param token Caracter de ativação das funções
+ * 
+ * @return Se conseguir adicionar retorna 1, caso contrário retorna 0
+ */
+int blocks (Stack *s, char *token) {
+	return 0;
+}
+
+/**
+ * @brief Implementa as funções de manipulação de input/output
+ * 
+ * @param s A stack
+ * @param token Caracter de ativação das funções
+ * 
+ * @return Se conseguir adicionar retorna 1, caso contrário retorna 0
+ */
+int input_output (Stack *s, char *token) {
+	if(print_top(s,token) == 1 || read_line(s,token) == 1 || read_all(s,token) == 1) return 1;
+	else return 0;
+}
+
+/**
+ * @brief Implementa as funções de conversão de tipos
+ * 
+ * @param s A stack
+ * @param token Caracter de ativação das funções
+ * 
+ * @return Se conseguir adicionar retorna 1, caso contrário retorna 0
+ */
+int convertions (Stack *s, char *token) {
+	if(toInt(s,token) == 1 || toChar(s,token) == 1 || toString(s,token) == 1 || toFloat(s,token) == 1) return 1;
+	else return 0;
+}
+
+/**
  * Implementa as funções de cálculo, conversão e manipulação da stack
  * 
  * @param s Stack
@@ -1147,46 +1236,6 @@ int newlines (Stack *s, char *token){
  * @return Se realizar uma operação retorna 1, caso contrário retorna 0
  */
 int compute_stack(Stack *s, char *token){
-    if(plus_ops(s,token) == 1) return 1;
-    if(minus_ops(s,token) == 1) return 1;
-	if(mult_ops(s,token) == 1) return 1;
-	if(div_ops(s,token) == 1) return 1;
-	if(mod_ops(s,token) == 1) return 1;
-	if(inc_ops(s,token) == 1) return 1;
-	if(dec_ops(s,token) == 1) return 1;
-	if(pow_ops(s,token) == 1) return 1;
-	if(and_ops(s,token) == 1) return 1;  
-	if(or_ops(s,token) == 1) return 1; 
-	if(xor_ops(s,token) == 1) return 1; 
-	if(not_ops(s,token) == 1) return 1;
-	if(double_ops(s,token) == 1) return 1; 
-	if(pop_ops(s,token) == 1) return 1; 
-	if(swap2_ops(s,token) == 1) return 1;
-	if(swap3_ops(s,token) == 1) return 1; 
-	if(copy_n_ops(s,token) == 1) return 1;
-	if(eq(s,token) == 1) return 1;
-	if(lesser(s,token) == 1) return 1;
-	if(bigger(s,token) == 1) return 1;
-	if(not(s,token) == 1) return 1;
-	if(or(s,token) == 1) return 1;
-	if(and(s,token) == 1) return 1; 
-	if(range(s,token) == 1) return 1;
-	if(newlines(s,token) == 1) return 1;
-	if(white_space(s,token) == 1) return 1;
-	if(push_lesser(s,token) == 1) return 1; 
-	if(push_bigger(s,token) == 1) return 1; 
-	if(if_then_else(s,token) == 1) return 1;
-	if(new_var(s,token) == 1) return 1;
-	if(toInt(s,token) == 1) return 1;
-	if(toChar(s,token) == 1) return 1;
-	if(toString(s,token) == 1) return 1;
-	if(toFloat(s,token) == 1) return 1;
-	if(print_top(s,token) == 1) return 1;
-	if(read_line(s,token) == 1) return 1;
-	if(read_all(s,token) == 1) return 1;
-	if(stackAdderInt(s,token) == 1) return 1;
-    if(stackAdderFloat(s,token) == 1) return 1;
-    if(stackAdderChar(s,token) == 1) return 1;
-	//if(stackAdderString(s,token) == 1) return 1;
+    if (arithmetic(s, token) == 1 || logic(s, token) == 1 || input_output(s, token) == 1 || arrays_strings(s, token) == 1 || blocks(s, token) == 1 || convertions(s, token) == 1 || stack_man(s, token) == 1 ) return 1;
     else return 0;
 }

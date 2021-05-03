@@ -6,11 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
-#include "stack.h"
-#include "parser.h"
-#include "types.h"
-#include "convertions.h"
 #include "equations.h"
 
 
