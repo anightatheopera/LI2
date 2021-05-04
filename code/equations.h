@@ -1,6 +1,5 @@
 #ifndef EQUATIONS_H 
 #define EQUATIONS_H
-
 #include "stack.h"
 
 int plus_ops(Stack *, char*);
@@ -28,6 +27,7 @@ int print_top(Stack *, char*);
 int stackAdderChar(Stack *, char*);
 int stackAdderString(Stack *, char*);
 int stackAdderFloat(Stack *, char*);
+int stackAdderBlock(Stack *, char*);
 int stackAdderInt(Stack *, char*);
 int read_line (Stack *, char *);
 int read_all(Stack *, char *);

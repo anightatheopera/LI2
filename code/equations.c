@@ -9,8 +9,8 @@
 #include <ctype.h>
 #include <assert.h>
 #include <math.h>
-#include "stack.h"
 #include "convertions.h"
+#include "blocks.h"
 
 /**
  * Soma os dois elementos no topo da stack
@@ -152,16 +152,22 @@ int mod_ops(Stack *s, char *token){
 	if (strcmp (token, "%") == 0) {      
 		Types *y = pop(s);
 		Types *x = pop(s);
+
+		if (y->block && x->string) { 
+			string_block(s, y->block, x->string); 
+			return 1; 
+		}
+
 		Types *maxt = max_type(x, y);
 		Types *mint = min_type(x, y);
 
 		converte(maxt->type, mint);
 
-		if (y->type == number)
+		if (y->number)
 			push(s, initNumber(x->number % y->number));
 		//else if (x->type == floats)
 		//	push(s, initFloat(x->floats % y->floats));
-		else if (y->type == single)
+		else if (y->single)
 			push(s, initChar(x->single % y->single));
 
 		return 1;
@@ -331,18 +337,20 @@ int xor_ops(Stack *s, char *token){
 
 int not_ops(Stack *s, char *token){
 		if (strcmp (token, "~") == 0) {       
-			Types *y = pop(s);
+		Types *y = pop(s);
 
-			if (y->type == number)
-				push(s, initNumber(~ y->number));
-			//else if (y->type == floats)
-			//	push(s, initFloat(~ y->floats));
-			else if (y->type == single)
-				push(s, initChar(~ y->single));
+		if (y->type == number)
+			push(s, initNumber(~ y->number));
+		//else if (y->type == floats)
+		//	push(s, initFloat(~ y->floats));
+		else if (y->type == single)
+			push(s, initChar(~ y->single));
+		else if (y->block)
+			exec_block(s , y->block);
 
-			return 1;
+		return 1;
 
-		} else return 0;
+	} else return 0;
 }
 
 /**
@@ -580,8 +588,8 @@ int print_top (Stack *s, char *token){
 
 			default:
 				break;
-			push(s, y);
 		}
+		push(s, y);
 		return 1;
 
 	} else return 0;
@@ -643,6 +651,21 @@ int stackAdderChar(Stack *s, char *token){
 int stackAdderString(Stack *s, char *token){
     if(strlen(token) >= 1) {
 		push(s, initString(token));
+        return 1;
+    }
+    else return 0;   
+}
+
+/**
+ * Esta função adiciona uma string à stack quando a recebe
+ * @param s A stack
+ * @param token A string a converter
+ * 
+ * @return Se conseguir adicionar retorna 1, caso contrário retorna 0
+ */
+int stackAdderBlock(Stack *s, char *token){
+    if(strlen(token) >= 1) {
+		push(s, initBlock(token));
         return 1;
     }
     else return 0;   
@@ -1190,17 +1213,6 @@ int arrays_strings (Stack *s, char *token) {
 	else return 0;
 }
 
-/**
- * @brief Implementa as funções de aplicação de blocos
- * 
- * @param s A stack
- * @param token Caracter de ativação das funções
- * 
- * @return Se conseguir adicionar retorna 1, caso contrário retorna 0
- */
-int blocks (Stack *s, char *token) {
-	return 0;
-}
 
 /**
  * @brief Implementa as funções de manipulação de input/output
@@ -1236,6 +1248,6 @@ int convertions (Stack *s, char *token) {
  * @return Se realizar uma operação retorna 1, caso contrário retorna 0
  */
 int compute_stack(Stack *s, char *token){
-    if (arithmetic(s, token) == 1 || logic(s, token) == 1 || input_output(s, token) == 1 || arrays_strings(s, token) == 1 || blocks(s, token) == 1 || convertions(s, token) == 1 || stack_man(s, token) == 1 ) return 1;
+    if (arithmetic(s, token) == 1 || logic(s, token) == 1 || input_output(s, token) == 1 || arrays_strings(s, token) == 1 || convertions(s, token) == 1 || stack_man(s, token) == 1 ) return 1;
     else return 0;
 }

@@ -67,6 +67,8 @@ void print_stack(Stack *s) {
         printf("%c", elem->single); break;
       case string:
         printf("%s", elem->string); break;
+      case block:
+        printf("%s", elem->block); break;
     }
   }
   printf("\n");

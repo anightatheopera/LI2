@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "stack.h"
 #include "convertions.h"
 
 /**
@@ -72,19 +71,19 @@ void conv_string(Types *y) {
             str = calloc(2, sizeof(char));
             sprintf(str, "%c", y->single);
             y->string = str;
-            
+            initString(y->string);
             break;
         case number:
             str = calloc(200000, sizeof(char));
             sprintf(str, "%ld", y->number);
             y->string = str;
-            
+            initString(y->string);
             break;
         case floats:
             str = calloc(200000, sizeof(char));
             sprintf(str, "%f", y->floats);
             y->string = str;
-            
+            initString(y->string);            
             break;
         default:
             

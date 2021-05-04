@@ -3,7 +3,6 @@
  * @brief Ficheiro que contém as funções que inicializam os diferentes tipos que a stack contém
  */
 #include "types.h"
-#include "stack.h"
 #include <stdlib.h>
 #include <stdio.h>
 /**
@@ -63,5 +62,17 @@ Types *initString(char *n){
 Types *initFloat(double n){
     Types *elem = init(floats);
     elem->floats = n;
+    return elem;
+}
+
+/**
+ * Esta função inicializa os blocos da stack
+ * @param n Um bloco
+ *
+ * @returns O tipo a ser entregue
+ */
+Types *initBlock(char *n){
+    Types *elem = init(block);
+    elem->block = n;
     return elem;
 }

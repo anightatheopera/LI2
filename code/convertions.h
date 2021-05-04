@@ -1,6 +1,6 @@
-#include "types.h"
 #ifndef CONVERTIONS_H 
 #define CONVERTIONS_H
+#include "stack.h"
 
 Types *max_type(Types *, Types *);
 Types *min_type(Types *, Types *);

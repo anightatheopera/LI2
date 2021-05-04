@@ -52,12 +52,33 @@ char *get_delimited(char *line, char *seps, char **rest) {
 }
 
 /**
- * Lê a linha de input e iniciliza a stack com os valores de input
+ * Separa e devolve a parte do input que está delimitada por "{ }" e adiciona à stack como um bloco
+ * 
+ * @param line Linha de input
+ * @param rest Resto da linha
+ * @return Devolve o token como bloco
+ */
+void *get_block(char *line, char **rest) {
+  int i;
+  int size = strlen(line);
+  char *token = calloc(size, sizeof(char));
+
+  for(i=0; line[i] != '}'; i++) token[i] = line[i];
+  token[i] = '}';
+  token[i+1] = ' ';
+  token[i+2] = '\0';
+
+  *rest = &line[i+1];
+  return token;
+}
+
+/**
+ * Lê a linha de input e adiciona os valores de input à respetiva stack
  *
  * @param line Linha de input a ler
+ * @param s A stack
  */
-void parse(char *line) {
-	Stack *s = stackinit(100);
+void parse(char *line, Stack *s) {
   char *token;
   char *rest = NULL;
 
@@ -73,7 +94,11 @@ void parse(char *line) {
     //}else if (line[0] == '[') {
     //  token = get_delimited(line, "[]", &rest);
     //  stackAdderArray?
-    
+
+    } else if (line[0] == '{') {
+      token = get_block(line, &rest);
+      if (token != NULL) stackAdderBlock(s, token);
+
     } else {
       token = get_token(line, &rest);
       if (token != NULL) compute_stack(s, token);
@@ -85,6 +110,4 @@ void parse(char *line) {
     if (token == NULL || line[0] == '\0' || line[0] == '\n') line = NULL;
 
   }
-	print_stack(s);
-	free(s);
 }
