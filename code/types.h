@@ -1,10 +1,12 @@
 #ifndef TYPES_H 
 #define TYPES_H
+#include "stack.h"
 
 /**
  * The enumeration of space dimension
  */
-typedef enum { block  = 5, /**< Blocos */ 
+typedef enum { block  = 6, /** < Blocos */
+               array  = 5, /** < Arrays */
                string = 4, /**< Strings */
                single = 3, /**< Caracteres */
                floats = 2, /**< Floats */
@@ -17,6 +19,7 @@ typedef enum { block  = 5, /**< Blocos */
 typedef struct types {
     /*@{*/
     Diftypes type; /**< Enumeração dos diferentes tipos */
+    struct stack *array; /** < Arrays */
     char *block; /**< Blocos */
     char *string; /**< Strings */
     long number; /**< Números inteiros */
@@ -31,5 +34,6 @@ Types *initChar(char);
 Types *initString(char*);
 Types *initFloat(double);
 Types *initBlock(char*);
+Types *initArray(struct stack*);
 
 #endif

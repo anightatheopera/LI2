@@ -11,6 +11,7 @@
 #include <math.h>
 #include "convertions.h"
 #include "blocks.h"
+#include "parser.h"
 
 /**
  * Soma os dois elementos no topo da stack
@@ -21,26 +22,32 @@
  */
 int plus_ops(Stack *s, char *token){
     if(strcmp (token, "+") == 0){
-            Types *y = pop(s);
-            Types *x = pop(s);
-            Types *maxt = max_type(x, y);
-            Types *mint = min_type(x, y);
+		Types *y = pop(s);
+		Types *x = pop(s);
+		Types *maxt = max_type(x, y);
+		Types *mint = min_type(x, y);
 
-            converte(maxt->type, mint);
-
-            if (y->type == number)
-                push(s, initNumber(y->number + x->number));
-            else if (y->type == floats)
-                push(s, initFloat(y->floats + x->floats));
-            else if (y->type == single)
-                push(s, initChar(y->single + x->single));
-			else if (y->type == string) {
-				int size = strlen(x->string) + strlen(y->string);
-				for(int i = strlen(x->string), j=0; i <= size; i++, j++) x->string[i] = y->string[j];
-				push(s, x);
+		converte(maxt->type, mint);
+		if (x->array) {
+			if (y->array) {
+				Stack *array = stackinit(100);
+				for (int i=0; i < x->array->size; i++) push(array, x->array->values[i]);
+				for (int i=0; i < y->array->size; i++) push(array, y->array->values[i]);
+				push(s, initArray(array));
+			} else {
+				push (x->array, y);
+				push (s, x);
 			}
-
-            return 1;
+		} else if (y->type == floats)
+			push(s, initFloat(y->floats + x->floats));
+		else if (y->string) {
+			strcat(x->string, y->string);
+			push(s, x);
+		} else if (y->single)
+			push(s, initChar(y->single + x->single));
+		else if (y->number)
+			push(s, initNumber(y->number + x->number));
+		return 1;
     }
     else return 0;
 }
@@ -87,25 +94,32 @@ int mult_ops(Stack *s, char *token){
 		Types *maxt = max_type(x, y);
 		Types *mint = min_type(x, y);
 
-		converte(maxt->type, mint);
-
-		if (y->type == number)
-			push(s, initNumber(y->number * x->number));
-		else if (y->type == floats)
-			push(s, initFloat(y->floats * x->floats));
-		else if (y->type == single)
-			push(s, initChar(y->single * x->single));
-		else if (y->type == string){
-			int size = strlen(x->string);
-			char new[size + y->number];
-
-			converte (number, y);
-			for(int j = 0; j < y->number; j++) {
-				for (int i = 0; i < size; i++) new[j*size + i] = x->string[i];
+		if (x->string && y->number){
+			char newS[strlen(x->string) * y->number];
+			while(y->number >  0) {
+				strcat(newS, x->string);
+				y->number--;
 			}
-			if (y->number == 0) new[0] = '\0';
-			push(s, initString(new));
+			push(s, initString(newS));
+			return 1;
+
+		} else if (y->number && x->array) {
+			Stack *array = stackinit(100);
+			while (y->number > 0 ) {	
+				for (int i=0; i < x->array->size; i++) push(array, x->array->values[i]);
+				y->number --;
+			}
+			push(s, initArray(array));
 		}
+
+		converte(maxt->type, mint);
+		if (y->number)
+			push(s, initNumber(y->number * x->number));
+		else if (y->floats)
+			push(s, initFloat(y->floats * x->floats));
+		else if (y->single)
+			push(s, initChar(y->single * x->single));
+
 		return 1;
 		
 	} else return 0;
@@ -156,7 +170,10 @@ int mod_ops(Stack *s, char *token){
 		if (y->block && x->string) { 
 			string_block(s, y->block, x->string); 
 			return 1; 
-		}
+		} /*else if (y->block && x->array) {
+			array_block(s, y->block, x->array); 
+			return 1; 
+		}*/
 
 		Types *maxt = max_type(x, y);
 		Types *mint = min_type(x, y);
@@ -347,6 +364,9 @@ int not_ops(Stack *s, char *token){
 			push(s, initChar(~ y->single));
 		else if (y->block)
 			exec_block(s , y->block);
+		else if (y->array) {
+			for (int i=0; i < y->array->size; i++) push(s, y->array->values[i]);
+		}
 
 		return 1;
 
@@ -641,6 +661,8 @@ int stackAdderChar(Stack *s, char *token){
     else return 0;
 }
 
+
+
 /**
  * Esta função adiciona uma string à stack quando a recebe
  * @param s A stack
@@ -672,6 +694,19 @@ int stackAdderBlock(Stack *s, char *token){
 }
 
 /**
+ * Esta função adiciona um array à stack quando o recebe
+ * @param s A stack
+ * @param token O array a converter
+ * 
+ */
+void stackAdderArray(Stack *s, char *token){
+	Stack *array = stackinit(100);
+    parse(token, array);
+
+    push(s, initArray(array));
+}
+
+/**
  * Lê a próxima linha de input e acrescenta à stack
  * 
  * @param s Stack
@@ -685,12 +720,8 @@ int read_line (Stack *s, char *token){
 		assert( fgets(line, 10240, stdin) != NULL);
 		line[strlen(line)-1] = '\0';
 
-		if (stackAdderInt(s,line) == 1) return 1;
-		if (stackAdderFloat(s,line) == 1) return 1;
-		if (stackAdderChar(s,line) == 1) return 1;
-		if (stackAdderString(s,line) == 1) return 1;
-		return 1;
-
+		if (stackAdderInt(s,line) == 1 || stackAdderFloat(s,line) == 1 || stackAdderChar(s,line) == 1 || stackAdderString(s,line) == 1) return 1;
+		else return 0;
 	} else return 0;
 }
 
@@ -773,23 +804,23 @@ int eq(Stack *s, char *token){
 		Types *maxt = max_type(x, y);
 		Types *mint = min_type(x, y);
 
-		if (y->type==number && x->type==string)
+		if (y->number && x->string) {
 			push(s, initChar(x->string[y->number]));
-		
-		else {
-			converte (maxt->type, mint);
 
-			if (y->type == number)
-				push(s, initNumber(y->number == x->number));
-			else if (y->type == floats)
-				push(s, initNumber(y->floats == x->floats));
-			else if (y->type == single)
-				push(s, initNumber(y->single == x->single));
-			else if (y->type == string) {
-				int flag = 0;
-				if (strcmp(y->string, x->string) == 0) flag = 1;
-				push(s, initNumber(flag));
-			}
+		} else if (y->number && x->array) push(s, x->array->values[y->number]);
+		
+		converte (maxt->type, mint);
+
+		if (y->type == number)
+			push(s, initNumber(y->number == x->number));
+		else if (y->type == floats)
+			push(s, initNumber(y->floats == x->floats));
+		else if (y->type == single)
+			push(s, initNumber(y->single == x->single));
+		else if (y->type == string) {
+			int flag = 0;
+			if (strcmp(y->string, x->string) == 0) flag = 1;
+			push(s, initNumber(flag));
 		}
 		return 1;
 	
@@ -811,31 +842,32 @@ int lesser(Stack *s, char *token){
 		Types *x = pop(s);
 		Types *maxt = max_type(x, y);
 		Types *mint = min_type(x, y);
+		converte (maxt->type, mint);
 
-		if (y->type==number && x->type==string) {
-			char new[y->number];
+		if (y->number && x->string) {
+			char *new = calloc(y->number, sizeof(char));
 			int i;
 			for (i=0; i<y->number; i++) new[i] = x->string[i];
 			new[i] = '\0';
 			push(s, initString(new));
-		}
-		else {
-			converte (maxt->type, mint);
 
-			if (y->type == number)
-				push(s, initNumber(y->number > x->number));
-			else if (y->type == floats)
-				push(s, initNumber(y->floats > x->floats));
-			else if (y->type == single)
-				push(s, initNumber(y->single > x->single));
-			else if (y->type == string) {
-				int flag = 0;
-				if (strcmp(x->string, y->string) < 0) flag = 1;
-				push(s, initNumber(flag));
-			}
+		} else if (y->number && x->array) {
+			Stack *array = stackinit(100);
+			for (int i=0; i<y->number; i++) push(array, x->array->values[i]);
+			push(s, initArray(array));
+		} else if (y->number)
+			push(s, initNumber(y->number > x->number));
+		else if (y->floats)
+			push(s, initNumber(y->floats > x->floats));
+		else if (y->type == single)
+			push(s, initNumber(y->single > x->single));
+		else if (y->string) {
+			int flag = 0;
+			if (strcmp(x->string, y->string) < 0) flag = 1;
+			push(s, initNumber(flag));
 		}
+
 		return 1;
-	
 	} else return 0;
 }
 
@@ -1110,8 +1142,9 @@ int range (Stack *s, char *token){
 		Types *y = pop(s);
 
 		if (y->type == number) {
-			for (int n = 0; n < y->number; n++)
-				push(s, initNumber(n));
+			Stack *array = stackinit(100);
+			for (int n = 0; n < y->number; n++) push(array, initNumber(n));
+			push(s, initArray(array));
 
 		/*} else if (y->type == floats)
 			push(s, initNumber(! y->floats));

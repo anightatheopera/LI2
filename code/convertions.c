@@ -9,6 +9,7 @@
 #include <string.h>
 #include <math.h>
 #include "convertions.h"
+#include "types.h"
 
 /**
  * @brief Compara dos elementos da stack e retorna o elemento cujo type é maior

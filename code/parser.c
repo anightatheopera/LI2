@@ -91,9 +91,9 @@ void parse(char *line, Stack *s) {
       if (token != NULL) stackAdderString(s, token);
 
 
-    //}else if (line[0] == '[') {
-    //  token = get_delimited(line, "[]", &rest);
-    //  stackAdderArray?
+    }else if (line[0] == '[') {
+      token = get_delimited(line, "[]", &rest);
+      if (token != NULL) stackAdderArray(s, token);
 
     } else if (line[0] == '{') {
       token = get_block(line, &rest);

@@ -6,6 +6,7 @@
 #include "stack.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "equations.h"
 
 /**
  * Inicializa uma stack
@@ -69,6 +70,8 @@ void print_stack(Stack *s) {
         printf("%s", elem->string); break;
       case block:
         printf("%s", elem->block); break;
+      case array:
+        print_stack(elem->array); break;
     }
   }
   printf("\n");

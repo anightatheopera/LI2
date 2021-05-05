@@ -6,6 +6,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include <math.h>
 #include "parser.h"
 #include "convertions.h"
@@ -38,7 +39,7 @@ void exec_block (Stack *s, char *block) {
  * @param n String onde será implementado o bloco
  */
 void string_block (Stack *s, char *block, char *n) {
-    char *new = calloc (127, sizeof(char));
+    char *new = calloc (1024, sizeof(char));
     
     block++;
     block[strlen(block)-1] = '\0';
@@ -56,3 +57,4 @@ void string_block (Stack *s, char *block, char *n) {
 
     push(s, initString(new));
 }
+
