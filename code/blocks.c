@@ -61,6 +61,13 @@ void string_block (Stack *s, char *block, char *n) {
     push(s, initString(new));
 }
 
+/**
+ * @brief Executa um bloco a um array
+ * 
+ * @param s A stack
+ * @param block Bloco a executar
+ * @param n Array onde será implementado o bloco
+ */
 void array_block (Stack *s, char *block, Stack *n) {
     Stack *array = stackinit(100);
     block++;
@@ -81,40 +88,46 @@ void array_block (Stack *s, char *block, Stack *n) {
     push(s, initArray(array));
 }
 
-
+/**
+ * @brief Operação filter com bloco para string
+ * 
+ * @param s A stack
+ * @param block Bloco a executar como filter
+ * @param n String a implementar
+ */
 void filter_string (Stack *s, char *block, char *n) {
-    char *new = calloc (1024, sizeof(char));
-    block++;
-    block[strlen(block)-1] = '\0';
+    string_block(s, block, n);
+    Types *w = pop(s);
+    char *new = calloc (strlen(w->string), sizeof(char));
+    for (int i = 0, k=0; i<(int)strlen(w->string); i++)
+        if (w->string[i] != '0') { new[k] = n[i]; k++; }
 
-    for (int i = 0, k = -1; i<(int)strlen(n); i++) {
-        Stack  *s2 = stackinit(100);
-        push(s2, initChar(n[i]));
-        parse(block, s2);
-        if (s2->values[i] != NULL) new[k++] = n[i-1];
-        free(s2);
-    }
+    free(w);
     push(s, initString(new));
 }
 
+/**
+ * @brief Operação filter com bloco para array
+ * 
+ * @param s A stack
+ * @param block Bloco a executar como filter
+ * @param n Array a implementar
+ */
 void filter_array (Stack *s, char *block, Stack *n) {
+    array_block(s, block, n);
+    Stack *w = pop(s);
     Stack *array = stackinit(100);
-    block++;
-    block[strlen(block)-1] = '\0';
-    
-    for (int i = 0; i<n->size; i++) {
-        Stack  *s2 = stackinit(100);
-        push(s2, n->values[i]);
-        parse(block, s2);
-        Types *y = s2->values[i];
-        if (y->number == 1) push(array, n->values[i]);
-        free(s2);
-    }
-
-    free(n);
+    for (int i = 0; i<w->size; i++)
+        if (w->values[i] == 0) push(array, w->values[i]);
     push(s, initArray(array));
 }
 
+/**
+ * @brief Operação filter com bloco para strings e arrays
+ * 
+ * @param s A stack
+ * @param block Bloco a executar como filter
+ */
 void filter_block (Stack* s, char *block) {
     Types *y = pop(s);
     if (y->string) filter_string(s, block, y->string);

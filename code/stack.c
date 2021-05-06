@@ -74,5 +74,4 @@ void print_stack(Stack *s) {
         print_stack(elem->array); break;
     }
   }
-  printf("\n");
 }

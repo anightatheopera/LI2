@@ -41,6 +41,7 @@ int bigger(Stack *, char *);
 int not(Stack *, char *);
 int and(Stack *, char *);
 int or(Stack *, char *);
+int truthy (Types*);
 int push_lesser(Stack *, char *);
 int arithmetic(Stack *, char *);
 int logic(Stack *, char *);

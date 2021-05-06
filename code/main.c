@@ -23,6 +23,7 @@ int main(){
 
 	parse(line, s);
 	print_stack(s);
+	printf("\n");
   	free(s);
 	return 0;
 }
