@@ -170,10 +170,10 @@ int mod_ops(Stack *s, char *token){
 		if (y->block && x->string) { 
 			string_block(s, y->block, x->string); 
 			return 1; 
-		} /*else if (y->block && x->array) {
+		} else if (y->block && x->array) {
 			array_block(s, y->block, x->array); 
 			return 1; 
-		}*/
+		}
 
 		Types *maxt = max_type(x, y);
 		Types *mint = min_type(x, y);
@@ -702,7 +702,6 @@ int stackAdderBlock(Stack *s, char *token){
 void stackAdderArray(Stack *s, char *token){
 	Stack *array = stackinit(100);
     parse(token, array);
-
     push(s, initArray(array));
 }
 
@@ -811,13 +810,13 @@ int eq(Stack *s, char *token){
 		
 		converte (maxt->type, mint);
 
-		if (y->type == number)
+		if (y->number)
 			push(s, initNumber(y->number == x->number));
-		else if (y->type == floats)
+		else if (y->floats)
 			push(s, initNumber(y->floats == x->floats));
-		else if (y->type == single)
+		else if (y->single)
 			push(s, initNumber(y->single == x->single));
-		else if (y->type == string) {
+		else if (y->string) {
 			int flag = 0;
 			if (strcmp(y->string, x->string) == 0) flag = 1;
 			push(s, initNumber(flag));
@@ -887,14 +886,14 @@ int bigger(Stack *s, char *token){
 		Types *maxt = max_type(x, y);
 		Types *mint = min_type(x, y);
 
-		if(y->type==number && x->type==string) {
+		if(y->number && x->string) {
 			x->string += ((int)strlen(x->string)-y->number);
 			push(s, x);
 		}
 		else {
 			converte(maxt->type, mint);
 
-			if (y->type == number)
+			if (y->number)
 				push(s, initNumber(x->number > y->number));
 			else if (y->type == floats)
 				push(s, initNumber(x->floats > y->floats));
@@ -1141,7 +1140,7 @@ int range (Stack *s, char *token){
 	if (strcmp (token, ",") == 0) {       
 		Types *y = pop(s);
 
-		if (y->type == number) {
+		if (y->number) {
 			Stack *array = stackinit(100);
 			for (int n = 0; n < y->number; n++) push(array, initNumber(n));
 			push(s, initArray(array));
@@ -1151,8 +1150,10 @@ int range (Stack *s, char *token){
 		else if (y->type == single)
 			push(s, initNumber(! y->single));
 			*/
-		} else if (y->type == string)
+		} else if (y->string)
 			push(s, initNumber(strlen(y->string)));
+		else if (y->block)
+			filter_block(s, y->block);
 
 		return 1;
 
