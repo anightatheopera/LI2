@@ -9,9 +9,41 @@
 #include <ctype.h>
 #include <assert.h>
 #include <math.h>
+#include <ctype.h>
 #include "convertions.h"
 #include "blocks.h"
 #include "parser.h"
+
+
+/**
+ * Função strndup
+ * 
+ * @param const char *s
+ * @param size_t n
+ * @return A string alterada
+ */
+char* strndup (const char *s, size_t n){
+  size_t len = strlen(s);
+  size_t size = (len < n) ? len : n;
+  return memcpy(calloc(size+1, sizeof(char)), s, size);
+}
+
+
+/**
+ * Função strdup
+ * 
+ * @param const char *s
+
+ * @return A string alterada
+ */
+char* strdup (const char *s)
+{
+  size_t len = strlen (s) + 1;
+  void *new = malloc (len);
+  if (new == NULL)
+    return NULL;
+  return (char *) memcpy (new, s, len);
+}
 
 /**
  * @brief Verificação de elementos truthy
@@ -416,9 +448,7 @@ int double_ops(Stack *s, char *token){
 		Types *y = pop(s);
 
 		if (y->string){
-			char *x = y->string;
-			strcpy(x, y->string);
-			push(s, initString(x));
+			push(s, initString(strdup(y->string)));
 
 		} else if (y-> number) {
 			push(s, initNumber(y->number));
@@ -1128,6 +1158,19 @@ int range (Stack *s, char *token){
 }
 
 /**
+ * Salta os whitespaces
+ * 
+ * @param *char Uma string
+ * 
+ * @returns A string sem whitespaces.
+ */
+char* skip_whitespace(char* str){
+	while(isspace(*str))
+    	str++;
+  return str;
+}
+
+/**
  * Separa a string do topo da stack por um whitespace
  * 
  * @param s A Stack
@@ -1138,11 +1181,21 @@ int range (Stack *s, char *token){
 int white_space (Stack *s, char *token){
 	if (strcmp (token, "S/") == 0) {
 		Types *y = pop(s);
-		push(s, strtok(y->string, " "));
+		if (y->type == string){
+			Stack* st = stackinit(100);
+			char* begin = y->string;
+			char* end;
+			while((end = strstr(begin, "\t\n ")) != NULL){
+    			push(st, initString(strndup(begin, end - begin)));
+    			begin = skip_whitespace(end);
+			}
+		}
 		return 1;
 	}
 	else return 0;
 }
+
+
 
 /**
  * Separa a string do topo da stack por um newlines
@@ -1155,7 +1208,16 @@ int white_space (Stack *s, char *token){
 int newlines (Stack *s, char *token){
 	if (strcmp (token, "N/") == 0) {
 		Types *y = pop(s);
-		push(s, strtok(y->string, "\n"));
+		if (y->type == string){
+		Stack* st = stackinit(100);
+		char* begin = y->string;
+		char* end;
+			while((end = strstr(begin, "\t\n ")) != NULL){
+   				push(st, strndup(begin, end - begin));
+    			begin = end + 1;
+			}
+		push(s, initString(strndup(begin, end - begin)));
+		}
 		return 1;
 	}
 	else return 0;
