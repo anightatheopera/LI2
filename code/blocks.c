@@ -88,6 +88,11 @@ void array_block (Stack *s, char *block, Stack *n) {
     push(s, initArray(array));
 }
 
+void map_block (Stack *s, char *block, Types *x) {
+    if (x->string) string_block(s, block, x->string);
+    else array_block(s, block, x->array);
+}
+
 /**
  * @brief Operação filter com bloco para string
  * 
@@ -120,6 +125,7 @@ void filter_array (Stack *s, char *block, Stack *n) {
     for (int i = 0; i<w->size; i++)
         if (w->values[i] == 0) push(array, w->values[i]);
     push(s, initArray(array));
+    free(w);
 }
 
 /**
@@ -132,4 +138,19 @@ void filter_block (Stack* s, char *block) {
     Types *y = pop(s);
     if (y->string) filter_string(s, block, y->string);
     else filter_array(s, block, y->array);
+}
+
+void fold_array (Stack *s, char *block, Stack *n) {
+    Stack *array = stackinit(100);
+    block++;
+    block[strlen(block)-1] = '\0';
+    block[strlen(block)-2] = '\0';
+    
+    for (int i = 0; i<n->size; i++) {
+        push(array, n->values[i]);
+        parse(block, array);
+    }
+
+    free(n);
+    push(s, initArray(array));
 }
