@@ -18,18 +18,11 @@
  * @param block Bloco a executar
  */
 void exec_block (Stack *s, char *block) {
-    Types *y = pop(s);
-    Stack  *s2 = stackinit(100);
-
-    push(s2, y);
     block++;
     block[strlen(block)-1] = '\0';
 
-    parse(block, s2);
-    
-    for (int i = 0; i < s2->size-1; i++)
-        push(s, s2->values[i]);
-    free(s2);
+    parse(block, s);
+    pop(s);
 }
 
 /**
@@ -41,23 +34,22 @@ void exec_block (Stack *s, char *block) {
  */
 void string_block (Stack *s, char *block, char *n) {
     char *new = calloc (1024, sizeof(char));
+    Stack  *s2 = stackinit(100);
     
     block++;
     block[strlen(block)-1] = '\0';
-    
 
     for (int i = 0; i<(int)strlen(n); i++) {
-        Stack  *s2 = stackinit(100);
         push(s2, initChar(n[i]));
         parse(block, s2);
-        for (int k = 0; k < s2->size-1; k++) {
-            Types *y = s2->values[k];
-            conv_string(y);
-            strcat(new, y->string);
-        }
-        free(s2);
+        pop(s2);
     }
-
+    for (int k = 0; k < s2->size; k++) {
+        Types *y = s2->values[k];
+        conv_string(y);
+        strcat(new, y->string);
+    }
+    free(s2);
     push(s, initString(new));
 }
 
@@ -73,8 +65,8 @@ void array_block (Stack *s, char *block, Stack *n) {
     block++;
     block[strlen(block)-1] = '\0';
     
-    for (int i = 0; i<n->size; i++) {
-        Stack  *s2 = stackinit(100);
+    for (int i = 0; i<(n->size); i++) {
+        Stack *s2 = stackinit(100);
         push(s2, n->values[i]);
         parse(block, s2);
         for (int k = 0; k < s2->size-1; k++) {
@@ -155,16 +147,63 @@ void filter_block (Stack* s, char *block) {
  * @param n Array a implementar o bloco
  */
 void fold_array (Stack *s, char *block, Stack *n) {
-    Stack *array = stackinit(100);
     block++;
     block[strlen(block)-1] = '\0';
-    block[strlen(block)-2] = '\0';
-    
-    for (int i = 0; i<n->size; i++) {
-        push(array, n->values[i]);
-        parse(block, array);
+
+    while (n->size != 1) {
+        parse(block, n);
+        pop(n);
     }
 
-    free(n);
-    push(s, initArray(array));
+    push(s, initArray(n));
 }
+
+
+void sort_block (Stack *s, char *block) {
+    Stack *s2 = stackinit(100);
+    block++;
+    block[strlen(block)-1] = '\0';
+    
+    for (int i = 0; s->size != 0; i++) {
+        Types *y = pop(s);
+        push(s2, y);
+        parse(block, s2);
+        pop(s2);
+    }
+    while (s2->size != 0){
+        Types *x = pop(s2);
+        push(s, x);
+    }
+    int count = s->size;
+    Types *temp;
+    for (int j = 0; j < count; j++) {
+      for (int k = j + 1; k < count; k++) {
+          if(big_op(s->values[k], s->values[j]) == 1) {
+              temp = s->values[j];
+              s->values[j] = s->values[k];
+              s->values[k] = temp;
+          }
+      }
+    }
+}
+
+/**
+ * Aplicação de um bloco enquanto deixar um truthy no topo da stack
+ * 
+ * @param s A stack
+ * @param block Bloco a executar
+ */
+void w_block (Stack *s, char *block) {
+    block++;
+    block[strlen(block)-1] = '\0';
+    int flag = 1;
+
+    while (flag != 0) {
+        parse(block, s);
+        pop(s);
+        Types *y = s->values[s->size-1];
+        if (truthy(y) == 0) flag = 0;
+    }
+}
+
+
