@@ -62,7 +62,7 @@ void string_block (Stack *s, char *block, char *n) {
 }
 
 /**
- * @brief Executa um bloco a um array
+ * Executa um bloco a um array
  * 
  * @param s A stack
  * @param block Bloco a executar
@@ -88,13 +88,20 @@ void array_block (Stack *s, char *block, Stack *n) {
     push(s, initArray(array));
 }
 
+/**
+ * Executa um bloco a um array/string
+ * 
+ * @param s A stack
+ * @param block Bloco a executar
+ * @param x Array/String onde será implementado o bloco
+ */
 void map_block (Stack *s, char *block, Types *x) {
     if (x->string) string_block(s, block, x->string);
     else array_block(s, block, x->array);
 }
 
 /**
- * @brief Operação filter com bloco para string
+ * Operação filter com bloco para string
  * 
  * @param s A stack
  * @param block Bloco a executar como filter
@@ -112,7 +119,7 @@ void filter_string (Stack *s, char *block, char *n) {
 }
 
 /**
- * @brief Operação filter com bloco para array
+ * Operação filter com bloco para array
  * 
  * @param s A stack
  * @param block Bloco a executar como filter
@@ -129,7 +136,7 @@ void filter_array (Stack *s, char *block, Stack *n) {
 }
 
 /**
- * @brief Operação filter com bloco para strings e arrays
+ * Operação filter com bloco para strings e arrays
  * 
  * @param s A stack
  * @param block Bloco a executar como filter
@@ -140,6 +147,13 @@ void filter_block (Stack* s, char *block) {
     else filter_array(s, block, y->array);
 }
 
+/**
+ * Operação fold de um bloco sobre um array
+ * 
+ * @param s A stack
+ * @param block Bloco a executar
+ * @param n Array a implementar o bloco
+ */
 void fold_array (Stack *s, char *block, Stack *n) {
     Stack *array = stackinit(100);
     block++;

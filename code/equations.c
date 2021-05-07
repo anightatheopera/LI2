@@ -1,6 +1,6 @@
 /** 
  * @file equations.c
- * Este ficheiro contem todas as equações a implementar na stack.
+ * @brief Este ficheiro contem todas as equações a implementar na stack.
  */
 
 #include <stdio.h>
@@ -48,7 +48,7 @@ char* strdup (const char *s)
 }
 
 /**
- * @brief Verificação de elementos truthy
+ * Verificação de elementos truthy
  * 
  * @param y Elemento a verificar
  * @return Retorna 1 caso seja truthy, caso conttrário devolve 0
@@ -1159,7 +1159,7 @@ int newlines (Stack *s, char *token){
 
 
 /**
- * @brief Implementa as funções de cálculo aritmético
+ * Implementa as funções de cálculo aritmético
  * 
  * @param s A stack
  * @param token Caracter de ativação das funções
@@ -1172,7 +1172,7 @@ int arithmetic (Stack *s, char *token){
 }
 
 /**
- * @brief Implementa as funções de cálculo lógico
+ * Implementa as funções de cálculo lógico
  * 
  * @param s A stack
  * @param token Caracter de ativação das funções
@@ -1186,7 +1186,7 @@ int logic (Stack *s, char *token){
 }
 
 /**
- * @brief Implementa as funções de manipulação da stack
+ * Implementa as funções de manipulação da stack
  * 
  * @param s A stack
  * @param token Caracter de ativação das funções
@@ -1199,7 +1199,7 @@ int stack_man (Stack *s, char *token){
 }
 
 /**
- * @brief Implementa as funções de manipulação de arrays/strings
+ * Implementa as funções de manipulação de arrays/strings
  * 
  * @param s A stack
  * @param token Caracter de ativação das funções
@@ -1213,7 +1213,7 @@ int arrays_strings (Stack *s, char *token) {
 
 
 /**
- * @brief Implementa as funções de manipulação de input/output
+ * Implementa as funções de manipulação de input/output
  * 
  * @param s A stack
  * @param token Caracter de ativação das funções
@@ -1226,7 +1226,7 @@ int input_output (Stack *s, char *token) {
 }
 
 /**
- * @brief Implementa as funções de conversão de tipos
+ * Implementa as funções de conversão de tipos
  * 
  * @param s A stack
  * @param token Caracter de ativação das funções

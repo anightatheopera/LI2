@@ -51,7 +51,7 @@ void push(Stack *s, void *n){
 }
 
 /**
- * @brief Imprime a stack
+ * Imprime a stack
  * 
  * @param s A stack a imprimir
  */

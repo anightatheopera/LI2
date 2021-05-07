@@ -1,6 +1,6 @@
 /** 
  * @file parser.c
- * Este ficheiro contêm as funções relacionadas com a inicialização da stack.
+ * @brief Este ficheiro contêm as funções relacionadas com a inicialização da stack.
  */
 
 #include <stdio.h>

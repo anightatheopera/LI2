@@ -10,7 +10,7 @@
 #include "parser.h"
 
 /**
- * @brief Esta é a função principal do programa
+ * Esta é a função principal do programa
  * 
  * @returns O valor 0
  */

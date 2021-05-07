@@ -12,7 +12,7 @@
 #include "types.h"
 
 /**
- * @brief Compara dos elementos da stack e retorna o elemento cujo type é maior
+ * Compara dos elementos da stack e retorna o elemento cujo type é maior
  * 
  * @param x Elemento da stack a comparar
  * @param y Elemento da stack a comparar
@@ -24,7 +24,7 @@ Types *max_type(Types *x, Types *y) {
 }
 
 /**
- * @brief Compara dos elementos da stack e retorna o elemento cujo type é menor
+ * Compara dos elementos da stack e retorna o elemento cujo type é menor
  * 
  * @param x Elemento da stack a comparar
  * @param y Elemento da stack a comparar
@@ -36,7 +36,7 @@ Types *min_type(Types *x, Types *y) {
 }
 
 /**
- * @brief Converte um elemento da stack para um type diferente
+ * Converte um elemento da stack para um type diferente
  * 
  * @param t Type a converter
  * @param y Elemento a converter
@@ -61,7 +61,7 @@ void converte(Diftypes t, Types *y) {
 }
 
 /**
- * @brief Converte para string
+ * Converte para string
  * 
  * @param y Elemento a converter
  */
@@ -94,7 +94,7 @@ void conv_string(Types *y) {
 }
 
 /**
- * @brief Converte para char
+ * Converte para char
  * 
  * @param y Elemento a converter
  */
@@ -118,7 +118,7 @@ void conv_char(Types *y) {
 }
 
 /**
- * @brief Converte para float
+ * Converte para float
  * 
  * @param y Elemento a converter
  */
@@ -144,7 +144,7 @@ void conv_float(Types *y) {
 }
 
 /**
- * @brief Converte para inteiro
+ * Converte para inteiro
  * 
  * @param y Elemento a converter
  */
