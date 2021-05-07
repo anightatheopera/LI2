@@ -1161,20 +1161,22 @@ int newlines (Stack *s, char *token){
 	if (strcmp (token, "N/") == 0) {
 		Types *y = pop(s);
 		if (y->type == string){
-		Stack* st = stackinit(100);
-		char* begin = y->string;
-		char* end;
+			Stack* st = stackinit(100);
+			char* begin = y->string;
+			char* end;
 			while((end = strstr(begin, "\n ")) != NULL){
    				push(st, strndup(begin, end - begin));
     			begin = end + 1;
 			}
-		push(s, initString(strndup(begin, end - begin)));
-		push(s, initArray(st));
+			push(s, initString(strndup(begin, end - begin)));
+			push(s, initArray(st));
 		}
 		return 1;
 	}
 	else return 0;
 }
+
+
 
 /**
  * Implementa as funções de cálculo aritmético
@@ -1225,7 +1227,7 @@ int stack_man (Stack *s, char *token){
  * @return Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
 int arrays_strings (Stack *s, char *token) {
-	if(range(s,token) == 1 || newlines(s,token) == 1 || white_space(s,token) == 1) return 1;
+	if(range(s,token) == 1 || newlines(s,token) == 1 || white_space(s,token) == 1 || div_ops(s,token) == 1) return 1;
 	else return 0;
 }
 
