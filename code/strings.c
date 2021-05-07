@@ -6,6 +6,7 @@
 #include "strings.h"
 #include <string.h>
 #include <stdlib.h>
+#include "equations.h"
 
 /**
  * Concatenação de strings
@@ -118,3 +119,16 @@ void tail_string (Stack *s, Types *y, Types *x) {
     push(s, x);
 }
 
+void break_string (Stack *s, Types *y, Types *x) {
+    if (y->type == string){
+        Stack* st = stackinit(100);
+        char* begin = x->string;
+        char* end;
+        while((end = strstr(begin, y->string)) != NULL){
+            push(st, initString(strndup(begin, end - begin)));
+            begin = strtok(x->string, y->string);
+        }
+        push(st, initString(begin));
+        push(s, initArray(st));
+    }
+}

@@ -172,8 +172,7 @@ int div_ops(Stack *s, char *token){
 			push(s, initNumber(x->number / y->number));
 		else if (y->type == single)
 			push(s, initChar(x->single / y->single));
-		else if (y->type == string)
-			push(s, initString(strtok(x->string, y->string)));
+		else if (y->type == string) break_string(s, y, x);
 		
 		return 1;
 
@@ -1165,7 +1164,7 @@ int newlines (Stack *s, char *token){
 		Stack* st = stackinit(100);
 		char* begin = y->string;
 		char* end;
-			while((end = strstr(begin, "\t\n ")) != NULL){
+			while((end = strstr(begin, "\n ")) != NULL){
    				push(st, strndup(begin, end - begin));
     			begin = end + 1;
 			}
@@ -1176,7 +1175,6 @@ int newlines (Stack *s, char *token){
 	}
 	else return 0;
 }
-
 
 /**
  * Implementa as funções de cálculo aritmético

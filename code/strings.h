@@ -10,5 +10,6 @@ void substring (Stack *, Types *, Types *);
 void index_string (Stack *, Types *, Types *); 
 void init_string (Stack *, Types *, Types *); 
 void tail_string (Stack *, Types *, Types *); 
+void break_string (Stack *, Types *, Types *); 
 
 #endif
