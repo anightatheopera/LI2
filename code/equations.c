@@ -128,14 +128,16 @@ int mult_ops(Stack *s, char *token){
 	if (strcmp (token, "*") == 0){       
 		Types *y = pop(s);
 		Types *x = pop(s);
+
+		if (y->type == block) { fold_array (s, y->block, x->array); return 1;}
+		else if (x->type == string) {replicate_string (s, y->number, x); return 1;}
+		else if (x->type == array) { replicate_array (s, y->number, x); return 1;}
+
 		Types *maxt = max_type(x, y);
 		Types *mint = min_type(x, y);
 		converte(maxt->type, mint);
 
-		if (y->type == block) fold_array (s, y->block, x->array);
-		else if (x->type == string) replicate_string (s, y->number, x);
-		else if (x->type == array) replicate_array (s, y->number, x);
-		else if (y->type == number)
+		if (y->type == number)
 			push(s, initNumber(y->number * x->number));
 		else if (y->type == floats)
 			push(s, initFloat(y->floats * x->floats));
@@ -493,7 +495,7 @@ int copy_n_ops(Stack *s, char *token){
 	if (strcmp (token, "$") == 0) {
 		Types *y = pop(s);
 
-		if (y->type == block) sort_block(s, y->block);
+		if (y->type == block) sort_all(s, y->block);
 		else {
 			Types *x = s->values[(s->size - 1) - y->number];
 			push(s, x);
@@ -514,8 +516,12 @@ int toInt(Stack *s, char *token){
 	if(strcmp("i", token)==0){
 		Types *y = pop(s);
 
-		conv_int(y);
-		push(s, y);
+		if (y->type == string) stackAdderInt(s, y->string);
+		else {
+			conv_int(y);
+			push(s, y);
+		}
+		
 		return 1;
 
 	} else return 0;
@@ -883,13 +889,12 @@ int lesser(Stack *s, char *token){
 	if (strcmp (token, "<") == 0) {       
 		Types *y = pop(s);
 		Types *x = pop(s);
+		if (y->type == number && x->type == string) {init_string(s, y, x); return 1; }
+		else if (y->type == number && x->type == array) {init_array(s, y, x); return 1;}
 		Types *maxt = max_type(x, y);
 		Types *mint = min_type(x, y);
 		converte (maxt->type, mint);
-
-		if (y->type == number && x->type == string) init_string(s, y, x);
-		else if (y->type == number && x->type == array) init_array(s, y, x);
-		else push(s, initNumber(less_op(y, x)));
+		push(s, initNumber(less_op(y, x)));
 
 		return 1;
 	} else return 0;

@@ -10,6 +10,7 @@ void filter_array(Stack *, char *, Stack *);
 void fold_array(Stack *, char *, Stack *);
 void map_block(Stack *, char *, Types *);
 void sort_block(Stack *, char *);
+void sort_all(Stack *, char *);
 void w_block(Stack *, char *);
 
 #endif

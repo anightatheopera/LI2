@@ -12,16 +12,18 @@
 #include "convertions.h"
 
 /**
- * Executa um bloco a um caracter/numero
+ * Executa um bloco ao elemento no topo da stack
  * 
  * @param s A stack
  * @param block Bloco a executar
  */
 void exec_block (Stack *s, char *block) {
-    block++;
-    block[strlen(block)-1] = '\0';
+    char *b = calloc (strlen(block), sizeof(char));
+    strcpy(b, block);
+    b++;
+    b[strlen(b)-1] = '\0';
 
-    parse(block, s);
+    parse(b, s);
     pop(s);
 }
 
@@ -64,13 +66,16 @@ void string_block (Stack *s, char *block, char *n) {
 void array_block (Stack *s, char *block, Stack *n) {
     Stack *array = stackinit(100);
     array->var = s->var;
-    block++;
-    block[strlen(block)-1] = '\0';
+    char *b = calloc (strlen(block), sizeof(char));
+    strcpy(b, block);
+    b++;
+    b[strlen(b)-1] = '\0';
     
     for (int i = 0; i<(n->size); i++) {
         Stack *s2 = stackinit(100);
+        s2->var = s->var;
         push(s2, n->values[i]);
-        parse(block, s2);
+        parse(b, s2);
         for (int k = 0; k < s2->size-1; k++) {
             Types *y = s2->values[k];
             push(array, y);
@@ -122,16 +127,18 @@ void filter_string (Stack *s, char *block, char *n) {
 void filter_array (Stack *s, char *block, Stack *n) {
     Stack *array = stackinit(100);
     array->var = s->var;
-    block++;
-    block[strlen(block)-1] = '\0';
+    char *b = calloc (strlen(block), sizeof(char));
+    strcpy(b, block);
+    b++;
+    b[strlen(b)-1] = '\0';
     
     for (int i = 0; i<(n->size); i++) {
         Stack *s2 = stackinit(100);
+        s2->var = s->var;
         push(s2, n->values[i]);
-        parse(block, s2);
+        parse(b, s2);
         Types *y = s2->values[0];
         if (y->number == 1) push(array, n->values[i]);
-        
         free(s2);
     }
 
@@ -159,14 +166,7 @@ void filter_block (Stack* s, char *block) {
  * @param n Array a implementar o bloco
  */
 void fold_array (Stack *s, char *block, Stack *n) {
-    block++;
-    block[strlen(block)-1] = '\0';
-
-    while (n->size != 1) {
-        parse(block, n);
-        pop(n);
-    }
-
+    while (n->size != 1) exec_block(n, block);
     push(s, initArray(n));
 }
 
@@ -179,13 +179,15 @@ void fold_array (Stack *s, char *block, Stack *n) {
 void sort_block (Stack *s, char *block) {
     Stack *s2 = stackinit(100);
     s2->var = s->var;
-    block++;
-    block[strlen(block)-1] = '\0';
+    char *b = calloc (strlen(block), sizeof(char));
+    strcpy(b, block);
+    b++;
+    b[strlen(b)-1] = '\0';
     
     for (int i = 0; s->size != 0; i++) {
         Types *y = pop(s);
         push(s2, y);
-        parse(block, s2);
+        parse(b, s2);
         pop(s2);
     }
     while (s2->size != 0){
@@ -202,7 +204,19 @@ void sort_block (Stack *s, char *block) {
               s->values[k] = temp;
           }
       }
-    }
+    } free(s2);
+}
+
+/**
+ * Operação de sort com bloco num array/string
+ * 
+ * @param s A stack
+ * @param block Bloco a executar
+ */
+void sort_all (Stack *s, char *block) {
+    Types *x = pop(s);
+    if (x->type == array) { sort_block(x->array, block); push(s, x); }
+    else { push(s, x); sort_block(s, block); }
 }
 
 /**
@@ -212,12 +226,14 @@ void sort_block (Stack *s, char *block) {
  * @param block Bloco a executar
  */
 void w_block (Stack *s, char *block) {
-    block++;
-    block[strlen(block)-1] = '\0';
+    char *b = calloc (strlen(block), sizeof(char));
+    strcpy(b, block);
+    b++;
+    b[strlen(b)-1] = '\0';
     int flag = 1;
 
     while (flag != 0) {
-        parse(block, s);
+        parse(b, s);
         pop(s);
         Types *y = s->values[s->size-1];
         if (truthy(y) == 0) flag = 0;

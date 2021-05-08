@@ -159,7 +159,6 @@ void conv_int(Types *y) {
             
             break;
         default:
-            
             break;
     }
     y->type = number;       

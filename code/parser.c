@@ -87,7 +87,6 @@ void *get_block(char *line, char **rest) {
   for(i=0; line[i] != '}'; i++) token[i] = line[i];
   token[i] = '}';
   token[i+1] = ' ';
-  token[i+2] = '\0';
 
   *rest = &line[i+1];
   return token;
