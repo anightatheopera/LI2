@@ -626,7 +626,7 @@ int print_top (Stack *s, char *token){
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
 int stackAdderInt(Stack *s, char *token){
-    for (int i = 0; i < (int) strlen(token); i++) 
+    for (int i = 0; i < (long) strlen(token); i++) 
         if(!isdigit(token[i])) 
             return 0;
     int num = atoi(token);
@@ -755,7 +755,7 @@ int read_all(Stack *s, char *token){
 			strcat(final, " ");
 			line = calloc(127, sizeof(char));
 		}
-		final[strlen(final)-1] = '\0';
+		//final[strlen(final)-1] = '\0';
 		push(s, initString(final));
 		free(line);
 		return 1;

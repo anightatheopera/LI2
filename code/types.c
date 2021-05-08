@@ -24,7 +24,7 @@ Types *init(Diftypes d){
  *
  * @returns O tipo a ser entregue
  */
-Types *initNumber(int n){
+Types *initNumber(long n){
     Types *elem = init(number);
     elem->number= n;
     return elem;

@@ -29,7 +29,7 @@ typedef struct types {
 } Types;
 
 Types *init(Diftypes);
-Types *initNumber(int);
+Types *initNumber(long);
 Types *initChar(char);
 Types *initString(char*);
 Types *initFloat(double);
