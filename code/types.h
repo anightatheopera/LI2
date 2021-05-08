@@ -5,8 +5,8 @@
 /**
  * The enumeration of space dimension
  */
-typedef enum { block  = 6, /** < Blocos */
-               array  = 5, /** < Arrays */
+typedef enum { block  = 6, /**< Blocos */
+               array  = 5, /**< Arrays */
                string = 4, /**< Strings */
                single = 3, /**< Caracteres */
                floats = 2, /**< Floats */
@@ -19,7 +19,7 @@ typedef enum { block  = 6, /** < Blocos */
 typedef struct types {
     /*@{*/
     Diftypes type; /**< Enumeração dos diferentes tipos */
-    struct stack *array; /** < Arrays */
+    struct stack *array; /**< Arrays */
     char *block; /**< Blocos */
     char *string; /**< Strings */
     long number; /**< Números inteiros */

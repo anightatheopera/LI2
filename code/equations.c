@@ -709,6 +709,13 @@ void stackAdderArray(Stack *s, char *token){
     push(s, initArray(array));
 }
 
+/**
+ * Operação continua ao longo da stack até deixar um valor untruthy
+ * 
+ * @param s A stack
+ * @param token Caracter que ativa a função
+ * @return Caso o token ative a função retorna 1, caso contrário retorna 0
+ */
 int until_truthy (Stack *s, char *token){
 	if(strcmp("w", token)==0){
 		Types *y = pop(s);
@@ -980,8 +987,8 @@ int and(Stack *s, char *token){
 
 		converte(maxt->type, mint);
 
-		if (truthy(x) == 1) push(s, y);
-		else push(s, x);
+		if (truthy(x) != 1) push(s, x);
+		else push(s, y);
 
 		return 1;
 	
@@ -1112,7 +1119,7 @@ int range (Stack *s, char *token){
 			range_array (s, y);
 
 		else if (y->string)
-			push(s, initNumber(strlen(y->string)));
+			{if (strlen(y->string) > 0) push(s, initNumber(strlen(y->string)));}
 
 		else if (y->block)
 			filter_block(s, y->block);
@@ -1133,6 +1140,7 @@ int range (Stack *s, char *token){
  * @returns A string sem whitespaces.
  */
 char* skip_whitespace(char* str){
+	if (strlen(str)==0) str = NULL;
 	while(isspace(*str))
     	str++;
   return str;
