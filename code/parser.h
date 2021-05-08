@@ -5,6 +5,7 @@
 void parse(char *, Stack *);
 char *get_token(char *, char **);
 char *get_block(char *, char **);
-char *get_delimited(char *, char *, char **);
+char *get_string(char *, char **);
+char *get_array(char *, char **);
 
 #endif

@@ -35,6 +35,7 @@ void exec_block (Stack *s, char *block) {
 void string_block (Stack *s, char *block, char *n) {
     char *new = calloc (1024, sizeof(char));
     Stack  *s2 = stackinit(100);
+    s2->var = s->var;
     
     block++;
     block[strlen(block)-1] = '\0';
@@ -62,6 +63,7 @@ void string_block (Stack *s, char *block, char *n) {
  */
 void array_block (Stack *s, char *block, Stack *n) {
     Stack *array = stackinit(100);
+    array->var = s->var;
     block++;
     block[strlen(block)-1] = '\0';
     
@@ -118,13 +120,23 @@ void filter_string (Stack *s, char *block, char *n) {
  * @param n Array a implementar
  */
 void filter_array (Stack *s, char *block, Stack *n) {
-    array_block(s, block, n);
-    Stack *w = pop(s);
     Stack *array = stackinit(100);
-    for (int i = 0; i<w->size; i++)
-        if (w->values[i] == 0) push(array, w->values[i]);
+    array->var = s->var;
+    block++;
+    block[strlen(block)-1] = '\0';
+    
+    for (int i = 0; i<(n->size); i++) {
+        Stack *s2 = stackinit(100);
+        push(s2, n->values[i]);
+        parse(block, s2);
+        Types *y = s2->values[0];
+        if (y->number == 1) push(array, n->values[i]);
+        
+        free(s2);
+    }
+
+    free(n);
     push(s, initArray(array));
-    free(w);
 }
 
 /**
@@ -158,9 +170,15 @@ void fold_array (Stack *s, char *block, Stack *n) {
     push(s, initArray(n));
 }
 
-
+/**
+ * Operação sort de um bloco
+ * 
+ * @param s A stack
+ * @param block Bloco a executar
+ */
 void sort_block (Stack *s, char *block) {
     Stack *s2 = stackinit(100);
+    s2->var = s->var;
     block++;
     block[strlen(block)-1] = '\0';
     

@@ -54,7 +54,7 @@ char* strdup (const char *s)
  * @return Retorna 1 caso seja truthy, caso conttrário devolve 0
  */
 int truthy (Types *y) {
-	if (y->single != '\0' || y->number != '\0' || y->string != NULL || y->floats != '\0' || y->array != NULL) return 1;
+	if (y->single != '\0' || y->number != '\0' || y->string != NULL || y->floats != '\0' || y->array->size != 0)  return 1;
 	else return 0;
 }
 
@@ -73,13 +73,10 @@ int plus_ops(Stack *s, char *token){
 		Types *mint = min_type(x, y);
 
 		converte(maxt->type, mint);
-		if (x->type == array) {
-			if (y->type == array) cat_array(s, y, x);
-			else {
-				push (x->array, y);
-				push (s, x);
-			}
-		} else if (y->type == floats)
+		if (x->type == array && y->type == array) cat_array(s, y, x);
+		else if (x->type == array || y->type == array) add_array(s, y, x);
+		else if (y->type == array) { push (y->array, x); push (s, y);	}
+		else if (y->type == floats)
 			push(s, initFloat(y->floats + x->floats));
 		else if (y->type == string)
 			cat_string(s, y, x);
@@ -136,8 +133,8 @@ int mult_ops(Stack *s, char *token){
 		converte(maxt->type, mint);
 
 		if (y->type == block) fold_array (s, y->block, x->array);
-		else if (x->type == string) replicate_string (s, y, x);
-		else if (x->type == array) replicate_array (s, y, x);
+		else if (x->type == string) replicate_string (s, y->number, x);
+		else if (x->type == array) replicate_array (s, y->number, x);
 		else if (y->type == number)
 			push(s, initNumber(y->number * x->number));
 		else if (y->type == floats)
@@ -419,6 +416,9 @@ int double_ops(Stack *s, char *token){
 		
 		} else if (y->type == floats) {
 			push(s, initFloat(y->floats));
+
+		} else if (y->type == array) {
+			create_array(s, y->array);
 		}
 
 		push(s, y);
@@ -698,6 +698,7 @@ int stackAdderBlock(Stack *s, char *token){
  */
 void stackAdderArray(Stack *s, char *token){
 	Stack *array = stackinit(100);
+	array->var = s->var;
     parse(token, array);
     push(s, initArray(array));
 }
@@ -1066,12 +1067,7 @@ int if_then_else(Stack *s, char *token){
 	if (strcmp (token, "?") == 0) {       
 		Types* z = pop(s);
 		Types* y = pop(s);
-		Types* x = pop(s);
-		Types *maxt = max_type(max_type(x, y), max_type(y,z));
-		converte(maxt->type, x);
-		converte(maxt->type, y);
-		converte(maxt->type, z);
-		
+		Types* x = pop(s);		
 
 		if (truthy(x) == 1) push(s, y);
 		else push(s,z);
@@ -1100,6 +1096,9 @@ int range (Stack *s, char *token){
 
 		else if (y->block)
 			filter_block(s, y->block);
+		
+		else if (y->array)
+			push(s, initNumber(y->array->size));
 
 		return 1;
 
@@ -1132,6 +1131,7 @@ int white_space (Stack *s, char *token){
 		Types *y = pop(s);
 		if (y->type == string){
 			Stack* st = stackinit(100);
+			st->var = s->var;
 			char* begin = y->string;
 			char* end;
 			while((end = strstr(begin, " ")) != NULL){
@@ -1162,6 +1162,7 @@ int newlines (Stack *s, char *token){
 		Types *y = pop(s);
 		if (y->type == string){
 			Stack* st = stackinit(100);
+			st->var = s->var;
 			char* begin = y->string;
 			char* end;
 			while((end = strstr(begin, "\n ")) != NULL){

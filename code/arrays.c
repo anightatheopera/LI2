@@ -15,9 +15,30 @@
  */
 void cat_array (Stack *s, Types *y, Types *x){
     Stack *array = stackinit(100);
+    array->var = s->var;
     for (int i=0; i < x->array->size; i++) push(array, x->array->values[i]);
     for (int i=0; i < y->array->size; i++) push(array, y->array->values[i]);
     push(s, initArray(array));
+}
+
+/**
+ * Adiciona um elemento ao array
+ * 
+ * @param s A stack
+ * @param y Elemento/Array
+ * @param x Elemento/Array
+ */
+void add_array (Stack *s, Types *y, Types *x){
+    if (x->type == array) { 
+        push (x->array, y); 
+        push (s, x);
+    } else {
+        Stack *array = stackinit(100);
+        array->var = s->var;
+        push (array, x); 
+        for (int i=0; i<y->array->size; ++i) push(array, y->array->values[i]);
+        push(s, initArray(array));
+    } 
 }
 
 /**
@@ -27,11 +48,12 @@ void cat_array (Stack *s, Types *y, Types *x){
  * @param y Número de réplicas
  * @param x Array a replicar
  */
-void replicate_array (Stack *s, Types *y, Types *x) {
+void replicate_array (Stack *s, int y, Types *x) {
     Stack *array = stackinit(100);
-    while (y->number > 0 ) {	
+    array->var = s->var;
+    while (y > 0 ) {	
         for (int i=0; i < x->array->size; i++) push(array, x->array->values[i]);
-        y->number --;
+        y --;
     }
     push(s, initArray(array));
 }
@@ -44,6 +66,7 @@ void replicate_array (Stack *s, Types *y, Types *x) {
  */
 void first_array (Stack *s, Types *y) {
     Stack *array = stackinit(y->array->size);
+    array->var = s->var;
     Types *x = y->array->values[0];
     for (int i=1; i< y->array->size; i++) {
         push(array, y->array->values[i]);
@@ -96,6 +119,7 @@ void index_array(Stack *s, Types *y, Types *x) {
 void init_array(Stack *s, Types *y, Types *x)  {
     int i=0;
     Stack *array = stackinit(100);
+    array->var = s->var;
     for (i=0; i<y->number; i++) push(array, x->array->values[i]);
     push(s, initArray(array));
 }
@@ -109,6 +133,7 @@ void init_array(Stack *s, Types *y, Types *x)  {
  */
 void tail_array(Stack *s, Types *y, Types *x)  {
     Stack *array = stackinit(100);
+    array->var = s->var;
     for (; y->number>0; y->number--) push(array, x->array->values[(x->array->size)-(y->number)]);
     push(s, initArray(array));
 }
@@ -121,6 +146,23 @@ void tail_array(Stack *s, Types *y, Types *x)  {
  */
 void range_array (Stack *s, Types *y) {
     Stack *array = stackinit(100);
+    array->var = s->var;
     for (int n = 0; n < y->number; n++) push(array, initNumber(n));
+    push(s, initArray(array));
+}
+
+/**
+ * Create a array object
+ * 
+ * @param s A stack
+ * @param n Array a copiar
+ */
+void create_array (Stack *s, Stack *n) {
+    Stack *array = stackinit(100);
+    array->var = s->var;
+    for (int i=0; i<n->size ; i++) {
+        Types *y = n->values[i];
+        push(array, y);
+    }
     push(s, initArray(array));
 }

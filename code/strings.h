@@ -3,7 +3,7 @@
 #include "stack.h"
 
 void cat_string (Stack *, Types *, Types *);
-void replicate_string (Stack *, Types *, Types *); 
+void replicate_string (Stack *, int , Types *); 
 void first_string (Stack *, Types *); 
 void last_string (Stack *, Types *); 
 void substring (Stack *, Types *, Types *); 

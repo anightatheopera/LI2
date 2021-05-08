@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "equations.h"
+#include <stdio.h>
 
 /**
  * Concatenação de strings
@@ -27,11 +28,11 @@ void cat_string (Stack *s, Types *y, Types *x){
  * @param y Número de réplicas
  * @param x String a replicar
  */
-void replicate_string (Stack *s, Types *y, Types *x) {
-    char newS[strlen(x->string) * y->number];
-    while(y->number >  0) {
+void replicate_string (Stack *s, int y, Types *x) {
+    char *newS = calloc (strlen(x->string) * y, sizeof(char));
+    while(y >  0) {
         strcat(newS, x->string);
-        y->number--;
+        y--;
     }
     push(s, initString(newS));
 }
@@ -119,9 +120,18 @@ void tail_string (Stack *s, Types *y, Types *x) {
     push(s, x);
 }
 
+
+/**
+ * Separa a string por uma substring e devolve um array com as strings
+ * 
+ * @param s A stack
+ * @param y Subtring
+ * @param x String
+ */
 void break_string (Stack *s, Types *y, Types *x) {
     if (y->type == string){
         Stack* st = stackinit(100);
+        st->var = s->var;
         char* begin = x->string;
         char* end;
         while((end = strstr(begin, y->string)) != NULL){
