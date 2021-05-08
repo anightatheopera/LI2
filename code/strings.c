@@ -102,7 +102,7 @@ void index_string (Stack *s, Types *y, Types *x) {
  */
 void init_string (Stack *s, Types *y, Types *x) {
     int i=0;
-    char *new = calloc(y->number, sizeof(char));
+    char *new = calloc(y->number + 1, sizeof(char));
     for (i=0; i<y->number; i++) new[i] = x->string[i];
     new[i] = '\0';
     push(s, initString(new));

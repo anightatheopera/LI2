@@ -130,7 +130,7 @@ int mult_ops(Stack *s, char *token){
 		Types *x = pop(s);
 
 		if (y->type == block) { fold_array (s, y->block, x->array); return 1;}
-		else if (x->type == string) {replicate_string (s, y->number, x); return 1;}
+		else if (x->type == string){ replicate_string (s, y->number, x); return 1;}
 		else if (x->type == array) { replicate_array (s, y->number, x); return 1;}
 
 		Types *maxt = max_type(x, y);
@@ -820,9 +820,14 @@ int eq(Stack *s, char *token){
 		Types *maxt = max_type(x, y);
 		Types *mint = min_type(x, y);
 
-		if (x->type == string && y->type == number) { index_string(s, y, x); return 1; }
-		else if (x->type == array && y->type == number) { index_array(s, y, x); return 1; }
-
+		if (x->type == string && y->type == number){ 
+			index_string(s, y, x); 
+			return 1; 
+		}
+		else if (x->type == array && y->type == number){ 
+				index_array(s, y, x); 
+				return 1; 
+			 }
 		converte (maxt->type, mint);
 		push(s, initNumber(equal_op(y, x)));
 
@@ -841,7 +846,9 @@ int eq(Stack *s, char *token){
 int less_op(Types *y, Types *x) {
 	int i = 0;
 	if ((y->type == floats && x->floats < y->floats)||(y->type == number && x->number < y->number)||(y->type == single && x->single < y->single)) i = 1;
-	else if (y->type == string) { if (strcmp(x->string, y->string) < 0) i = 1; }
+	else if (y->type == string){ 
+			if (strcmp(x->string, y->string) < 0) i = 1; 
+		 }
 	else i = 0;
 	return i;
 }
@@ -856,7 +863,9 @@ int less_op(Types *y, Types *x) {
 int big_op(Types *y, Types *x) {
 	int i = 0;
 	if ((y->type == floats && x->floats > y->floats)||(y->type == number && x->number > y->number)||(y->type == single && x->single > y->single)) i = 1;
-	else if (y->type == string) { if (strcmp(x->string, y->string) > 0) i = 1; }
+	else if (y->type == string){ 
+		 	if (strcmp(x->string, y->string) > 0) i = 1; 
+		 }
 	else i = 0;
 	return i;
 }
@@ -871,7 +880,9 @@ int big_op(Types *y, Types *x) {
 int equal_op(Types *y, Types *x) {
 	int i = 0;
 	if ((y->type == floats && x->floats == y->floats)||(y->type == number && x->number == y->number)||(y->type == single && x->single == y->single)) i = 1;
-	else if (y->type == string) { if (strcmp(x->string, y->string) == 0) i = 1; }
+	else if (y->type == string){ 
+			if (strcmp(x->string, y->string) == 0) i = 1; 
+		 }
 	else i = 0;
 	return i;
 }
@@ -889,8 +900,12 @@ int lesser(Stack *s, char *token){
 	if (strcmp (token, "<") == 0) {       
 		Types *y = pop(s);
 		Types *x = pop(s);
-		if (y->type == number && x->type == string) {init_string(s, y, x); return 1; }
-		else if (y->type == number && x->type == array) {init_array(s, y, x); return 1;}
+		if (y->type == number && x->type == string){
+			init_string(s, y, x); return 1; 
+		}
+		else if (y->type == number && x->type == array){
+				init_array(s, y, x); return 1;
+			 }
 		Types *maxt = max_type(x, y);
 		Types *mint = min_type(x, y);
 		converte (maxt->type, mint);

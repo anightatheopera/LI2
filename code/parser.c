@@ -64,7 +64,7 @@ char *get_array(char *line, char **rest) {
 char *get_string(char *line, char **rest) {
   int i, j;
   int size = strlen(line);
-  char *token = calloc(size, sizeof(char));
+  char *token = calloc(size + 1, sizeof(char));
 
   for(i=1, j=0; line[i] != '\"'; j++, i++) token[j] = line[i];
   token[j] = '\0';

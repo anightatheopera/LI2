@@ -109,9 +109,11 @@ void map_block (Stack *s, char *block, Types *x) {
 void filter_string (Stack *s, char *block, char *n) {
     string_block(s, block, n);
     Types *w = pop(s);
-    char *new = calloc (strlen(w->string), sizeof(char));
+    char *new = calloc (strlen(w->string) + 1, sizeof(char));
     for (int i = 0, k=0; i<(int)strlen(w->string); i++)
-        if (w->string[i] != '0') { new[k] = n[i]; k++; }
+        if (w->string[i] != '0'){ 
+            new[k] = n[i]; k++; 
+        }
 
     free(w);
     push(s, initString(new));
