@@ -598,27 +598,11 @@ int toChar(Stack *s, char *token){
 int print_top (Stack *s, char *token){
     if(strcmp("p", token)==0){
         Types *y = pop(s);
-		
-		switch(y->type) {
-			case number:
-				printf ("%ld\n", y->number);
-				break;
-
-			case single:
-				printf ("%c\n", y->single);
-				break;
-
-			case string:
-				printf ("%s\n", y->string);
-				break;
-
-			case floats:
-				printf ("%f\n", y->floats);
-				break;
-
-			default:
-				break;
-		}
+		Stack *s2 = stackinit(1);
+		push(s2, y);
+		print_stack(s2);
+		putchar('\n');
+		free(s2);
 		push(s, y);
 		return 1;
 
@@ -877,9 +861,7 @@ long less_op(Types *y, Types *x) {
 long big_op(Types *y, Types *x) {
 	long i = 0;
 	if ((y->type == floats && x->floats > y->floats)||(y->type == number && x->number > y->number)||(y->type == single && x->single > y->single)) i = 1;
-	else if (y->type == string){ 
-		 	if (strcmp(x->string, y->string) > 0) i = 1; 
-		 }
+	else if (y->type == string) {if (strcmp(x->string, y->string) > 0) i = 1;}
 	else i = 0;
 	return i;
 }
@@ -919,7 +901,7 @@ int lesser(Stack *s, char *token){
 		}
 		else if (y->type == number && x->type == array){
 				init_array(s, y, x); return 1;
-			 }
+		}
 		Types *maxt = max_type(x, y);
 		Types *mint = min_type(x, y);
 		converte (maxt->type, mint);
