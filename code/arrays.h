@@ -12,6 +12,6 @@ void index_array(Stack *, Types *, Types *);
 void init_array(Stack *, Types *, Types *);  
 void tail_array(Stack *, Types *, Types *); 
 void range_array (Stack *, Types *);
-void create_array (Stack *, Stack *);
+Types *create_array (Stack *, Stack *);
 
 #endif

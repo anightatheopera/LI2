@@ -53,7 +53,7 @@ char* strdup (const char *s)
  * @param y Elemento a verificar
  * @return Retorna 1 caso seja truthy, caso conttrário devolve 0
  */
-int truthy (Types *y) {
+long truthy (Types *y) {
 	if (y->single != '\0' || y->number != '\0' || y->string != NULL || y->floats != '\0' || y->array->size != 0)  return 1;
 	else return 0;
 }
@@ -128,6 +128,7 @@ int mult_ops(Stack *s, char *token){
 	if (strcmp (token, "*") == 0){       
 		Types *y = pop(s);
 		Types *x = pop(s);
+
 
 		if (y->type == block) { fold_array (s, y->block, x->array); return 1;}
 		else if (x->type == string){ replicate_string (s, y->number, x); return 1;}
@@ -396,6 +397,18 @@ int or_ops(Stack *s, char *token){
 	} else return 0;
 }
 
+Types *copy_value (Stack *s, Types *y) {
+	Types *x;
+	if (y->type == string) x = initString(strdup(y->string));
+	else if (y->type == number) x = initNumber(y->number);
+	else if (y->type == single) x = initChar(y->single);
+	else if (y->type == floats) x = initFloat(y->floats);
+	else if (y->type == block) x = initBlock(strdup(y->block));
+	else if (y->type == array) x = create_array(s, y->array);
+	else x = NULL;
+	return x;
+}
+
 /**
  * Duplica o elemento no topo da stack
  * 
@@ -407,21 +420,8 @@ int double_ops(Stack *s, char *token){
 	if (strcmp (token, "_") == 0) {
 		Types *y = pop(s);
 
-		if (y->type == string){
-			push(s, initString(strdup(y->string)));
-
-		} else if (y->type == number) {
-			push(s, initNumber(y->number));
-
-		} else if (y->type == single) {
-			push(s, initChar(y->single));
-		
-		} else if (y->type == floats) {
-			push(s, initFloat(y->floats));
-
-		} else if (y->type == array) {
-			create_array(s, y->array);
-		}
+		if (y->type == array) push(s, create_array(s, y->array));
+		else push(s, copy_value(s, y));
 
 		push(s, y);
 		return 1;
@@ -518,7 +518,7 @@ int toInt(Stack *s, char *token){
 
 		if (y->type == string) stackAdderInt(s, y->string);
 		else {
-			conv_int(y);
+			conv_long(y);
 			push(s, y);
 		}
 		
@@ -626,10 +626,10 @@ int print_top (Stack *s, char *token){
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
 int stackAdderInt(Stack *s, char *token){
-    for (int i = 0; i < (long) strlen(token); i++) 
+    for (long i = 0; i < (long) strlen(token); i++) 
         if(!isdigit(token[i])) 
             return 0;
-    int num = atoi(token);
+    long num = atoi(token);
     push(s, initNumber(num));
     return 1; 
 }
@@ -674,7 +674,7 @@ int stackAdderChar(Stack *s, char *token){
  * @return Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
 int stackAdderString(Stack *s, char *token){
-    if(strlen(token) >= 1) {
+    if((long)strlen(token) >= 1) {
 		push(s, initString(token));
         return 1;
     }
@@ -779,11 +779,12 @@ int read_all(Stack *s, char *token){
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
 int new_var(Stack *s, char *token){
-	int x = (int)token[0] - 65;
+	long x = (int)token[0] - 65;
 	Types *y = s->var[x];
 
 	if(token[0]==':'){
-		s->var[(int)token[1] - 65] = s->values[(s->size - 1)];
+		Types *x = copy_value(s, s->values[(s->size - 1)]);
+		s->var[(long)token[1] - 65] = x;
 		return 1;
 
 	} else if ((y == NULL) && x>=0 && x<=25){ 
@@ -849,8 +850,8 @@ int eq(Stack *s, char *token){
  * @param x Elemento
  * @return Caso a condição seja verdadeira devolve 1, caso conttrário devolve 0
  */
-int less_op(Types *y, Types *x) {
-	int i = 0;
+long less_op(Types *y, Types *x) {
+	long i = 0;
 	if ((y->type == floats && x->floats < y->floats)||(y->type == number && x->number < y->number)||(y->type == single && x->single < y->single)) i = 1;
 	else if (y->type == string){ 
 			if (strcmp(x->string, y->string) < 0) i = 1; 
@@ -866,8 +867,8 @@ int less_op(Types *y, Types *x) {
  * @param x Elemento
  * @return Caso a condição seja verdadeira devolve 1, caso conttrário devolve 0
  */
-int big_op(Types *y, Types *x) {
-	int i = 0;
+long big_op(Types *y, Types *x) {
+	long i = 0;
 	if ((y->type == floats && x->floats > y->floats)||(y->type == number && x->number > y->number)||(y->type == single && x->single > y->single)) i = 1;
 	else if (y->type == string){ 
 		 	if (strcmp(x->string, y->string) > 0) i = 1; 
@@ -883,8 +884,8 @@ int big_op(Types *y, Types *x) {
  * @param x Elemento
  * @return Caso a condição seja verdadeira devolve 1, caso conttrário devolve 0
  */
-int equal_op(Types *y, Types *x) {
-	int i = 0;
+long equal_op(Types *y, Types *x) {
+	long i = 0;
 	if ((y->type == floats && x->floats == y->floats)||(y->type == number && x->number == y->number)||(y->type == single && x->single == y->single)) i = 1;
 	else if (y->type == string){ 
 			if (strcmp(x->string, y->string) == 0) i = 1; 
@@ -1168,7 +1169,7 @@ char* skip_newlines(char* str){
  */
 char* nl_to_ws(char* str){
 	if (strlen(str)==0) str = NULL;
-	for(int i=0; str[i]!='\0';i++) if (str[i] == '\n') str[i] = ' ';
+	for(long i=0; str[i]!='\0';i++) if (str[i] == '\n') str[i] = ' ';
   return str;
 }
 

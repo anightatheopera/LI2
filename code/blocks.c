@@ -42,12 +42,12 @@ void string_block (Stack *s, char *block, char *n) {
     block++;
     block[strlen(block)-1] = '\0';
 
-    for (int i = 0; i<(int)strlen(n); i++) {
+    for (long i = 0; i<(long)strlen(n); i++) {
         push(s2, initChar(n[i]));
         parse(block, s2);
         pop(s2);
     }
-    for (int k = 0; k < s2->size; k++) {
+    for (long k = 0; k < s2->size; k++) {
         Types *y = s2->values[k];
         conv_string(y);
         strcat(new, y->string);
@@ -71,12 +71,12 @@ void array_block (Stack *s, char *block, Stack *n) {
     b++;
     b[strlen(b)-1] = '\0';
     
-    for (int i = 0; i<(n->size); i++) {
+    for (long i = 0; i<(n->size); i++) {
         Stack *s2 = stackinit(100);
         s2->var = s->var;
         push(s2, n->values[i]);
         parse(b, s2);
-        for (int k = 0; k < s2->size-1; k++) {
+        for (long k = 0; k < s2->size-1; k++) {
             Types *y = s2->values[k];
             push(array, y);
         }
@@ -110,7 +110,7 @@ void filter_string (Stack *s, char *block, char *n) {
     string_block(s, block, n);
     Types *w = pop(s);
     char *new = calloc (strlen(w->string) + 1, sizeof(char));
-    for (int i = 0, k=0; i<(int)strlen(w->string); i++)
+    for (long i = 0, k=0; i<(int)strlen(w->string); i++)
         if (w->string[i] != '0'){ 
             new[k] = n[i]; k++; 
         }
@@ -134,7 +134,7 @@ void filter_array (Stack *s, char *block, Stack *n) {
     b++;
     b[strlen(b)-1] = '\0';
     
-    for (int i = 0; i<(n->size); i++) {
+    for (long i = 0; i<(n->size); i++) {
         Stack *s2 = stackinit(100);
         s2->var = s->var;
         push(s2, n->values[i]);
@@ -173,7 +173,7 @@ void fold_array (Stack *s, char *block, Stack *n) {
     Types *y = n->values[0];
     push(s2, y);
     
-    for (int i = 1; i<n->size; i++) {
+    for (long i = 1; i<n->size; i++) {
         Types *x = n->values[i];
         push(s2, x);
         exec_block(s2, block);
@@ -194,17 +194,17 @@ void sort_block (Stack *s, char *block) {
     strcpy(b, block);
     b++;
     b[strlen(b)-1] = '\0';
-    int count = s->size;
+    long count = s->size;
     
-    for (int i = 0; i<count; i++) {
+    for (long i = 0; i<count; i++) {
         Types *y = s->values[i];
         push(s2, y);
         parse(b, s2);
         pop(s2);
     }
     Types *temp1, *temp2;
-    for (int j = 0; j < count; j++) {
-      for (int k = j + 1; k < count; k++) {
+    for (long j = 0; j < count; j++) {
+      for (long k = j + 1; k < count; k++) {
           if(big_op(s2->values[k], s2->values[j]) == 1) {
               temp1 = s->values[j];
               s->values[j] = s->values[k];

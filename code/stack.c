@@ -14,7 +14,7 @@
  * @param capacity A capacidade da stack
  * @returns Uma stack inicializada
  */
-Stack *stackinit(int capacity){
+Stack *stackinit(long capacity){
     Stack *s = (Stack *) calloc(1, sizeof(Stack));
     s->allocsize = capacity;
     s->size = 0;
@@ -57,7 +57,7 @@ void push(Stack *s, void *n){
  * @param s A stack a imprimir
  */
 void print_stack(Stack *s) {
-  for(int k = 0; k < s->size; k++) {
+  for(long k = 0; k < s->size; k++) {
     Types *elem = s->values[k];
     Diftypes t = elem->type;
     switch(t) {
@@ -71,7 +71,7 @@ void print_stack(Stack *s) {
         printf("%s", elem->string); 
         break;
       case block:
-        elem->block[strlen(elem->block)-1] = '\0';
+        if (elem->block[strlen (elem->block) - 1] == ' ') elem->block[strlen (elem->block) - 1] = '\0';
         printf("%s", elem->block); break;
       case array:
         print_stack(elem->array);

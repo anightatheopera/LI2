@@ -17,8 +17,8 @@
  * @return Devolve o token
  */
 char *get_token(char *line, char **rest) {
-    int i;
-    int size = strlen(line);
+    long i;
+    long size = strlen(line);
     char *token = calloc(size, sizeof(char));
     
   for(i=0; line[i]!='\n' && line[i]!='\0' && line[i]!=' ' && line[i]!='\t' && i<size; i++)
@@ -39,8 +39,8 @@ char *get_token(char *line, char **rest) {
  * @return Devolve o token como string ou array
  */
 char *get_array(char *line, char **rest) {
-  int i, f, l;
-  int size = strlen(line);
+  long i, f, l;
+  long size = strlen(line);
   char *token = calloc(size, sizeof(char));
 
   for (i=1, f=1, l=0; l < f; ++i) {
@@ -62,8 +62,8 @@ char *get_array(char *line, char **rest) {
  * @return Devolve o token como string
  */
 char *get_string(char *line, char **rest) {
-  int i, j;
-  int size = strlen(line);
+  long i, j;
+  long size = strlen(line);
   char *token = calloc(size + 1, sizeof(char));
 
   for(i=1, j=0; line[i] != '\"'; j++, i++) token[j] = line[i];
@@ -80,8 +80,8 @@ char *get_string(char *line, char **rest) {
  * @return Devolve o token como bloco
  */
 void *get_block(char *line, char **rest) {
-  int i, f, l;
-  int size = strlen(line);
+  long i, f, l;
+  long size = strlen(line);
   char *token = calloc(size, sizeof(char));
 
   token[0] = '{';

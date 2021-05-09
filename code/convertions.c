@@ -44,7 +44,7 @@ Types *min_type(Types *x, Types *y) {
 void converte(Diftypes t, Types *y) {
     switch(t) {
         case number:
-            conv_int(y);
+            conv_long(y);
             break;
         case single:
             conv_char(y);
@@ -74,7 +74,7 @@ void conv_string(Types *y) {
             y->string = str;
             initString(y->string);
             break;
-            
+
         case number:
             str = calloc(200000, sizeof(char));
             sprintf(str, "%ld", y->number);
@@ -102,14 +102,14 @@ void conv_string(Types *y) {
  * @param y Elemento a converter
  */
 void conv_char(Types *y) {
-    int n;
+    long n;
     switch(y->type){
         case number:
             y->single = (char) y->number;
             
             break;
         case floats:
-            n = ((int) floor(y->floats));
+            n = ((long) floor(y->floats));
             y->single = (char) n;
             
             break;
@@ -151,10 +151,10 @@ void conv_float(Types *y) {
  * 
  * @param y Elemento a converter
  */
-void conv_int(Types *y) {
+void conv_long(Types *y) {
     switch(y->type) {
         case single:
-            y->number = (int) y->single;
+            y->number = (long) y->single;
             
             break;
         case floats:

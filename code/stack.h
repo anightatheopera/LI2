@@ -14,7 +14,7 @@ typedef struct stack {
     /*@{*/
 } Stack;
 
-Stack *stackinit(int);
+Stack *stackinit(long);
 void *pop(Stack *);
 void push(Stack *, void *);
 void print_stack(Stack *);

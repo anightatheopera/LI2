@@ -28,7 +28,7 @@ void cat_string (Stack *s, Types *y, Types *x){
  * @param y Número de réplicas
  * @param x String a replicar
  */
-void replicate_string (Stack *s, int y, Types *x) {
+void replicate_string (Stack *s, long y, Types *x) {
     char *newS = calloc (strlen(x->string) * y, sizeof(char));
     while(y >  0) {
         strcat(newS, x->string);
@@ -57,7 +57,7 @@ void first_string (Stack *s, Types *y) {
  * @param y String a remover o último char
  */
 void last_string (Stack *s, Types *y) {
-    int size = strlen(y->string);
+    long size = strlen(y->string);
     char c = y->string[size-1];
     y->string[size-1] = '\0';
     push(s, y);
@@ -85,7 +85,7 @@ void substring (Stack *s, Types *y, Types *x) {
  * @param x String
  */
 void index_string (Stack *s, Types *y, Types *x) {
-    int i=0;
+    long i=0;
     if (y->string) {if (strcmp(y->string, x->string) == 0) i = 1;}
     else { 
         if (y != NULL) i = y->number;
@@ -101,7 +101,7 @@ void index_string (Stack *s, Types *y, Types *x) {
  * @param x String inicial
  */
 void init_string (Stack *s, Types *y, Types *x) {
-    int i=0;
+    long i=0;
     char *new = calloc(y->number + 1, sizeof(char));
     for (i=0; i<y->number; i++) new[i] = x->string[i];
     new[i] = '\0';

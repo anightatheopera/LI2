@@ -16,9 +16,9 @@
  */
 int main(){
 	Stack *s = stackinit(100);
-	char line[10240];
+	char line[102400];
 
-	assert( fgets(line, 10240, stdin) != NULL);
+	assert( fgets(line, 102400, stdin) != NULL);
 	assert( line[strlen(line) - 1] == '\n'   );
 
 	parse(line, s);

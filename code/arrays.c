@@ -157,12 +157,12 @@ void range_array (Stack *s, Types *y) {
  * @param s A stack
  * @param n Array a copiar
  */
-void create_array (Stack *s, Stack *n) {
+Types *create_array (Stack *s, Stack *n) {
     Stack *array = stackinit(100);
     array->var = s->var;
     for (int i=0; i<n->size ; i++) {
         Types *y = n->values[i];
         push(array, y);
     }
-    push(s, initArray(array));
+    return initArray(array);
 }
