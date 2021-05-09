@@ -129,16 +129,16 @@ void tail_string (Stack *s, Types *y, Types *x) {
  * @param x String
  */
 void break_string (Stack *s, Types *y, Types *x) {
-    if (y->type == string){
+    if (x->type == string){
         Stack* st = stackinit(100);
         st->var = s->var;
-        char* begin = x->string;
+        char* begin = strdup(x->string);
         char* end;
         while((end = strstr(begin, y->string)) != NULL){
-            push(st, initString(strndup(begin, end - begin)));
-            begin = strtok(x->string, y->string);
+            push(st, initString(strtok(begin, y->string)));
+            begin = end + strlen(y->string);
         }
-        push(st, initString(begin));
+        if(strlen(begin) != 0) push(st, initString(begin));
         push(s, initArray(st));
     }
 }

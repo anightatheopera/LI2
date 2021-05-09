@@ -68,12 +68,14 @@ void print_stack(Stack *s) {
       case single:
         printf("%c", elem->single); break;
       case string:
-        printf("%s", elem->string); break;
+        printf("%s", elem->string); 
+        break;
       case block:
         elem->block[strlen(elem->block)-1] = '\0';
         printf("%s", elem->block); break;
       case array:
-        print_stack(elem->array); break;
+        print_stack(elem->array);
+        break;
     }
   }
 }

@@ -759,10 +759,9 @@ int read_all(Stack *s, char *token){
 
 		while(scanf("%[^\n]%*c",line) == 1) {
 			strcat(final, line);
-			strcat(final, " ");
+			strcat(final, "\n");
 			line = calloc(127, sizeof(char));
 		}
-		//final[strlen(final)-1] = '\0';
 		push(s, initString(final));
 		free(line);
 		return 1;
@@ -1119,7 +1118,7 @@ int range (Stack *s, char *token){
 			range_array (s, y);
 
 		else if (y->string)
-			{if (strlen(y->string) > 0) push(s, initNumber(strlen(y->string)));}
+			push(s, initNumber(strlen(y->string)));
 
 		else if (y->block)
 			filter_block(s, y->block);
@@ -1147,6 +1146,20 @@ char* skip_whitespace(char* str){
 }
 
 /**
+ * Salta os newlines
+ * 
+ * @param *char Uma string
+ * 
+ * @returns A string sem newlines.
+ */
+char* skip_newlines(char* str){
+	if (strlen(str)==0) str = NULL;
+	while(str[0] == '\n');
+    	str++;
+  return str;
+}
+
+/**
  * Separa a string do topo da stack por um whitespace
  * 
  * @param s A Stack
@@ -1163,10 +1176,10 @@ int white_space (Stack *s, char *token){
 			char* begin = y->string;
 			char* end;
 			while((end = strstr(begin, " ")) != NULL){
-    			push(st, initString(strndup(begin, end - begin)));
-    			begin = skip_whitespace(end);
+				push(st, initString(strndup(begin, end - begin)));
+				begin = skip_whitespace(end);
 			}
-			push(st, initString(begin));
+			if(strlen(begin) != 0) push(st, initString(begin));
 			push(s, initArray(st));
 		}
 		
@@ -1174,8 +1187,6 @@ int white_space (Stack *s, char *token){
 	}
 	else return 0;
 }
-
-
 
 /**
  * Separa a string do topo da stack por um newlines
@@ -1193,19 +1204,18 @@ int newlines (Stack *s, char *token){
 			st->var = s->var;
 			char* begin = y->string;
 			char* end;
-			while((end = strstr(begin, "\n ")) != NULL){
-   				push(st, strndup(begin, end - begin));
-    			begin = end + 1;
+			while((end = strstr(begin, "\n")) != NULL){
+				push(st, initString(strndup(begin, end - begin)));
+				begin = skip_whitespace(end);
 			}
-			push(s, initString(strndup(begin, end - begin)));
+			if(strlen(begin) != 0) push(st, initString(begin));
 			push(s, initArray(st));
 		}
+		
 		return 1;
 	}
 	else return 0;
 }
-
-
 
 /**
  * Implementa as funções de cálculo aritmético

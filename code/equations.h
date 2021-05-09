@@ -56,5 +56,6 @@ int compute_stack(Stack *, char *);
 char* strndup (const char *, size_t);
 char* strdup (const char *);
 char* skip_whitespace(char* );
+char* skip_newlines(char* );
 
 #endif
