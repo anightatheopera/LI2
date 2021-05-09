@@ -397,6 +397,13 @@ int or_ops(Stack *s, char *token){
 	} else return 0;
 }
 
+/**
+ * Copia o conteudo do elemento
+ * 
+ * @param s Stack
+ * @param y Elemento a ser copiado
+ * @return Types* Retorna a cópia
+ */
 Types *copy_value (Stack *s, Types *y) {
 	Types *x;
 	if (y->type == string) x = initString(strdup(y->string));
