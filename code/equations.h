@@ -57,5 +57,6 @@ char* strndup (const char *, size_t);
 char* strdup (const char *);
 char* skip_whitespace(char* );
 char* skip_newlines(char* );
+char* nl_to_ws(char* );
 
 #endif

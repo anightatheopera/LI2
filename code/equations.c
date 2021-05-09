@@ -1160,6 +1160,19 @@ char* skip_newlines(char* str){
 }
 
 /**
+ * Transforma newlines em whitespaces
+ * 
+ * @param *char Uma string
+ * 
+ * @returns A string sem newlines.
+ */
+char* nl_to_ws(char* str){
+	if (strlen(str)==0) str = NULL;
+	for(int i=0; str[i]!='\0';i++) if (str[i] == '\n') str[i] = ' ';
+  return str;
+}
+
+/**
  * Separa a string do topo da stack por um whitespace
  * 
  * @param s A Stack
@@ -1175,6 +1188,7 @@ int white_space (Stack *s, char *token){
 			st->var = s->var;
 			char* begin = y->string;
 			char* end;
+			begin = nl_to_ws(begin);
 			while((end = strstr(begin, " ")) != NULL){
 				push(st, initString(strndup(begin, end - begin)));
 				begin = skip_whitespace(end);
