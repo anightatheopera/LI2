@@ -80,13 +80,17 @@ char *get_string(char *line, char **rest) {
  * @return Devolve o token como bloco
  */
 void *get_block(char *line, char **rest) {
-  int i;
+  int i, f, l;
   int size = strlen(line);
   char *token = calloc(size, sizeof(char));
 
-  for(i=0; line[i] != '}'; i++) token[i] = line[i];
-  token[i] = '}';
-  token[i+1] = ' ';
+  token[0] = '{';
+  for (i=1, f=1, l=0; l < f; ++i) {
+    if (line[i] == '{') ++f;
+    if (line[i] == '}') ++l;
+    token[i] = line[i];
+  }
+  token[i] = ' ';
 
   *rest = &line[i+1];
   return token;

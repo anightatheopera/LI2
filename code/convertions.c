@@ -74,18 +74,21 @@ void conv_string(Types *y) {
             y->string = str;
             initString(y->string);
             break;
+            
         case number:
             str = calloc(200000, sizeof(char));
             sprintf(str, "%ld", y->number);
             y->string = str;
             initString(y->string);
             break;
+
         case floats:
             str = calloc(200000, sizeof(char));
             sprintf(str, "%f", y->floats);
             y->string = str;
             initString(y->string);            
             break;
+
         default:
             
             break;
