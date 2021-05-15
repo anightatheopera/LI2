@@ -16,9 +16,8 @@
  * @param y String a concatenar com x
  * @param x String a concatenar com y
  */
-void cat_string (Stack *s, Types *y, Types *x){
+void cat_string (Types *y, Types *x){
     strcat(x->string, y->string);
-	push(s, x); 
 }
 
 /**
@@ -45,8 +44,8 @@ void replicate_string (Stack *s, long y, Types *x) {
  */
 void first_string (Stack *s, Types *y) {
     char c = y->string[0];
-    char *str = y->string++;
-    push(s, initString(str));
+    y->string++;
+    push (s, y);
     push(s, initChar(c));
 }
 
@@ -87,11 +86,10 @@ void substring (Stack *s, Types *y, Types *x) {
 void index_string (Stack *s, Types *y, Types *x) {
     long i=0;
     if (y->string) {if (strcmp(y->string, x->string) == 0) i = 1;}
-    else { 
+    else {
         if (y != NULL) i = y->number;
         push(s, initChar(x->string[i]));
     }
-    free(x);
     free(y);
 }
 

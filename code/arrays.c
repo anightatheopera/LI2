@@ -30,11 +30,11 @@ void cat_array (Stack *s, Types *y, Types *x){
  */
 void add_array (Stack *s, Types *y, Types *x){
     if (x->type == array) { 
-        push (x->array, y); 
-        push (s, x);
+        push (x->array, y);
+        push(s, x);
     } else {
         Stack *array = stackinit(100);
-        array->var = s->var;
+        array->var = s->var;      
         push (array, x); 
         for (int i=0; i<y->array->size; ++i) push(array, y->array->values[i]);
         push(s, initArray(array));

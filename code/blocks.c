@@ -157,17 +157,15 @@ void filter_block (Stack* s, char *block) {
  * @param n Array a implementar o bloco
  */
 void fold_array (Stack *s, char *block, Stack *n) {
-    Stack *s2 = stackinit(n->size);
+    Stack *s2 = stackinit(3);
     s2->var = s->var;
-    Types *y = n->values[0];
-    push(s2, y);
+    push(s2, n->values[0]);
     
-    for (long i = 1; i<n->size; i++) {
+    for (int i = 1; i<n->size; ++i) {
         Types *x = n->values[i];
         push(s2, x);
         exec_block(s2, block);
         pop(s2);
-        free(x);
     }
     push(s, s2->values[0]);
     free(s2);
@@ -186,21 +184,22 @@ void sort_block (Stack *s, char *block) {
     long count = s->size;
     
     for (long i = 0; i<count; i++) {
-        Types *y = s->values[i];
+        Types *y = copy_value(s, s->values[i]);
         push(s2, y);
         exec_block(s2, block);
         pop(s2);
     }
-    Types *temp1, *temp2;
+    Types *temp1;
+    Types *temp2;
     for (long j = 0; j < count; j++) {
       for (long k = j + 1; k < count; k++) {
           if(big_op(s2->values[k], s2->values[j]) == 1) {
-              temp1 = s->values[j];
-              s->values[j] = s->values[k];
-              s->values[k] = temp1;
-              temp2 = s2->values[j];
-              s2->values[j] = s2->values[k];
-              s2->values[k] = temp2;
+            temp1 = s->values[j];
+            s->values[j] = s->values[k];
+            s->values[k] = temp1;
+            temp2 = s2->values[j];
+            s2->values[j] = s2->values[k];
+            s2->values[k] = temp2;
           }
       }
     }
