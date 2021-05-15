@@ -141,8 +141,8 @@ int mult_ops(Stack *s, char *token){
 		converte(maxt->type, mint);
 
 		if (y->type == number) x->number = y->number * x->number;
-		else if (y->type == floats) x->number = y->floats * x->floats;
-		else if (y->type == single) x->number = y->single * x->single;
+		else if (y->type == floats) x->floats = y->floats * x->floats;
+		else if (y->type == single) x->single = y->single * x->single;
 		
 		push(s, x);
 		free(y);
