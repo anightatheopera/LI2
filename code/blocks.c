@@ -34,7 +34,7 @@ void exec_block (Stack *s, char *block) {
  * @param n String onde será implementado o bloco
  */
 void string_block (Stack *s, char *block, char *n) {
-    char *new = calloc (1024, sizeof(char));
+    char *new = calloc (10240, sizeof(char));
     Stack  *s2 = stackinit(100);
     s2->var = s->var;
 
@@ -47,6 +47,7 @@ void string_block (Stack *s, char *block, char *n) {
         Types *y = s2->values[k];
         conv_string(y);
         strcat(new, y->string);
+        free(y);
     }
     free(s2);
     push(s, initString(new));
@@ -119,7 +120,7 @@ void filter_string (Stack *s, char *block, char *n) {
  * @param n Array a implementar
  */
 void filter_array (Stack *s, char *block, Stack *n) {
-    Stack *array = stackinit(10);
+    Stack *array = stackinit(n->size);
     array->var = s->var;
     
     for (long i = 0; i<(n->size); i++) {
@@ -156,7 +157,7 @@ void filter_block (Stack* s, char *block) {
  * @param n Array a implementar o bloco
  */
 void fold_array (Stack *s, char *block, Stack *n) {
-    Stack *s2 = stackinit(10);
+    Stack *s2 = stackinit(n->size);
     s2->var = s->var;
     Types *y = n->values[0];
     push(s2, y);
@@ -168,8 +169,9 @@ void fold_array (Stack *s, char *block, Stack *n) {
         pop(s2);
         free(x);
     }
-    push(s, initArray(s2));
+    push(s, s2->values[0]);
     free(y);
+    free(s2);
     free(n);
 }
 
@@ -202,7 +204,8 @@ void sort_block (Stack *s, char *block) {
               s2->values[k] = temp2;
           }
       }
-    } //free(s2);
+    }
+    free(s2);
 }
 
 /**
