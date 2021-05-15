@@ -14,7 +14,7 @@
  * @param x Array a concatenar com y
  */
 void cat_array (Stack *s, Types *y, Types *x){
-    Stack *array = stackinit(100);
+    Stack *array = stackinit(x->array->size + y->array->size);
     array->var = s->var;
     for (int i=0; i < x->array->size; i++) push(array, x->array->values[i]);
     for (int i=0; i < y->array->size; i++) push(array, y->array->values[i]);
@@ -49,7 +49,7 @@ void add_array (Stack *s, Types *y, Types *x){
  * @param x Array a replicar
  */
 void replicate_array (Stack *s, int y, Types *x) {
-    Stack *array = stackinit(100);
+    Stack *array = stackinit(x->array->size);
     array->var = s->var;
     while (y > 0 ) {	
         for (int i=0; i < x->array->size; i++) push(array, x->array->values[i]);
@@ -145,10 +145,11 @@ void tail_array(Stack *s, Types *y, Types *x)  {
  * @param y Número de elementos da range
  */
 void range_array (Stack *s, Types *y) {
-    Stack *array = stackinit(100);
+    Stack *array = stackinit(y->number);
     array->var = s->var;
     for (int n = 0; n < y->number; n++) push(array, initNumber(n));
     push(s, initArray(array));
+    free(y);
 }
 
 /**

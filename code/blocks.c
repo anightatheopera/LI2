@@ -119,11 +119,11 @@ void filter_string (Stack *s, char *block, char *n) {
  * @param n Array a implementar
  */
 void filter_array (Stack *s, char *block, Stack *n) {
-    Stack *array = stackinit(100);
+    Stack *array = stackinit(10);
     array->var = s->var;
     
     for (long i = 0; i<(n->size); i++) {
-        Stack *s2 = stackinit(100);
+        Stack *s2 = stackinit(10);
         s2->var = s->var;
         push(s2, n->values[i]);
         exec_block(s2, block);
@@ -156,7 +156,7 @@ void filter_block (Stack* s, char *block) {
  * @param n Array a implementar o bloco
  */
 void fold_array (Stack *s, char *block, Stack *n) {
-    Stack *s2 = stackinit(100);
+    Stack *s2 = stackinit(10);
     s2->var = s->var;
     Types *y = n->values[0];
     push(s2, y);
@@ -166,8 +166,10 @@ void fold_array (Stack *s, char *block, Stack *n) {
         push(s2, x);
         exec_block(s2, block);
         pop(s2);
+        free(x);
     }
     push(s, initArray(s2));
+    free(y);
     free(n);
 }
 
