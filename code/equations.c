@@ -53,9 +53,14 @@ char* strdup (const char *s)
  * @param y Elemento a verificar
  * @return Retorna 1 caso seja truthy, caso conttrário devolve 0
  */
-long truthy (Types *y) {
-	if (y->single != '\0' || y->number != '\0' || y->string != NULL || y->floats != '\0' || y->array->size != 0)  return 1;
-	else return 0;
+int truthy (Types *y) {
+	int i=0;
+	if (y->type == number && y->number != '\0') i = 1;
+	else if (y->type == single && y->single != '\0') i = 1;
+	else if (y->type == string && y->string != NULL) i = 1;
+	else if (y->type == floats && y->floats != '\0') i = 1;
+	else if (y->type == array && y->array->size != 0) i = 1;
+	return i;
 }
 
 /**
@@ -359,8 +364,10 @@ int not_ops(Stack *s, char *token){
 			push(s, initNumber(~ y->number));
 		else if (y->type == single)
 			push(s, initChar(~ y->single));
-		else if (y->type == block)
+		else if (y->type == block) {
 			exec_block(s, y->block);
+			pop(s);
+		}
 		else if (y->type == array)
 			include_stack(s, y);
 
@@ -743,15 +750,15 @@ int read_line (Stack *s, char *token){
  * @return Caso o token ative a função retorna 1, caso contrário retorna 0
  */
 int read_all(Stack *s, char *token){
-	char *final = calloc(1024, sizeof(char));
-	char *line = calloc(127, sizeof(char));
+	char *final = calloc(10240, sizeof(char));
+	char *line = calloc(4096, sizeof(char));
 
     if(strcmp("t", token)==0){
 
 		while(scanf("%[^\n]%*c",line) == 1) {
 			strcat(final, line);
 			strcat(final, "\n");
-			line = calloc(127, sizeof(char));
+			line = calloc(4096, sizeof(char));
 		}
 		push(s, initString(final));
 		free(line);

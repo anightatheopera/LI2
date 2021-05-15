@@ -24,7 +24,6 @@ void exec_block (Stack *s, char *block) {
     b[strlen(b)-1] = '\0';
 
     parse(b, s);
-    pop(s);
 }
 
 /**
@@ -38,13 +37,10 @@ void string_block (Stack *s, char *block, char *n) {
     char *new = calloc (1024, sizeof(char));
     Stack  *s2 = stackinit(100);
     s2->var = s->var;
-    
-    block++;
-    block[strlen(block)-1] = '\0';
 
     for (long i = 0; i<(long)strlen(n); i++) {
         push(s2, initChar(n[i]));
-        parse(block, s2);
+        exec_block(s2, block);
         pop(s2);
     }
     for (long k = 0; k < s2->size; k++) {
@@ -66,16 +62,12 @@ void string_block (Stack *s, char *block, char *n) {
 void array_block (Stack *s, char *block, Stack *n) {
     Stack *array = stackinit(100);
     array->var = s->var;
-    char *b = calloc (strlen(block), sizeof(char));
-    strcpy(b, block);
-    b++;
-    b[strlen(b)-1] = '\0';
     
     for (long i = 0; i<(n->size); i++) {
         Stack *s2 = stackinit(100);
         s2->var = s->var;
         push(s2, n->values[i]);
-        parse(b, s2);
+        exec_block(s2, block);
         for (long k = 0; k < s2->size-1; k++) {
             Types *y = s2->values[k];
             push(array, y);
@@ -129,16 +121,12 @@ void filter_string (Stack *s, char *block, char *n) {
 void filter_array (Stack *s, char *block, Stack *n) {
     Stack *array = stackinit(100);
     array->var = s->var;
-    char *b = calloc (strlen(block), sizeof(char));
-    strcpy(b, block);
-    b++;
-    b[strlen(b)-1] = '\0';
     
     for (long i = 0; i<(n->size); i++) {
         Stack *s2 = stackinit(100);
         s2->var = s->var;
         push(s2, n->values[i]);
-        parse(b, s2);
+        exec_block(s2, block);
         Types *y = s2->values[0];
         if (y->number == 1) push(array, n->values[i]);
         free(s2);
@@ -177,8 +165,10 @@ void fold_array (Stack *s, char *block, Stack *n) {
         Types *x = n->values[i];
         push(s2, x);
         exec_block(s2, block);
+        pop(s2);
     }
     push(s, initArray(s2));
+    free(n);
 }
 
 /**
@@ -190,16 +180,12 @@ void fold_array (Stack *s, char *block, Stack *n) {
 void sort_block (Stack *s, char *block) {
     Stack *s2 = stackinit(100);
     s2->var = s->var;
-    char *b = calloc (strlen(block), sizeof(char));
-    strcpy(b, block);
-    b++;
-    b[strlen(b)-1] = '\0';
     long count = s->size;
     
     for (long i = 0; i<count; i++) {
         Types *y = s->values[i];
         push(s2, y);
-        parse(b, s2);
+        exec_block(s2, block);
         pop(s2);
     }
     Types *temp1, *temp2;
@@ -236,14 +222,10 @@ void sort_all (Stack *s, char *block) {
  * @param block Bloco a executar
  */
 void w_block (Stack *s, char *block) {
-    char *b = calloc (strlen(block), sizeof(char));
-    strcpy(b, block);
-    b++;
-    b[strlen(b)-1] = '\0';
     int flag = 1;
 
     while (flag != 0) {
-        parse(b, s);
+        exec_block(s, block);
         pop(s);
         Types *y = s->values[s->size-1];
         if (truthy(y) == 0) flag = 0;

@@ -42,7 +42,7 @@ int bigger(Stack *, char *);
 int not(Stack *, char *);
 int and(Stack *, char *);
 int or(Stack *, char *);
-long truthy (Types*);
+int truthy (Types*);
 long big_op (Types*, Types*);
 long less_op (Types*, Types*);
 long equal_op (Types*, Types*);
