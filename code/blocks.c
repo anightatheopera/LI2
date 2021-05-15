@@ -227,11 +227,11 @@ void sort_all (Stack *s, char *block) {
 void w_block (Stack *s, char *block) {
     int flag = 1;
 
-    while (flag != 0) {
+    while (flag == 1) {
         exec_block(s, block);
         pop(s);
-        Types *y = s->values[s->size-1];
-        if (truthy(y) == 0) flag = 0;
+        Types *y = pop(s);
+        if (truthy(y) == 0) flag = 0; 
     }
 }
 

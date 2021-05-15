@@ -786,12 +786,12 @@ int read_all(Stack *s, char *token){
  * @returns Se conseguir adicionar retorna 1, caso contrário retorna 0
  */
 int new_var(Stack *s, char *token){
-	long x = (int)token[0] - 65;
+	int x = (int)token[0] - 65;
 	Types *y = s->var[x];
 
 	if(token[0]==':'){
 		Types *x = copy_value(s, s->values[(s->size - 1)]);
-		s->var[(long)token[1] - 65] = x;
+		s->var[(int)token[1] - 65] = x;
 		return 1;
 
 	} else if ((y == NULL) && x>=0 && x<=25){ 
@@ -803,11 +803,11 @@ int new_var(Stack *s, char *token){
 
 		}else if ((x >= 0 && x <= 22) && x != 18 && x != 13){
 			x +=10;
-			push(s, initNumber(x));
+			push(s, initNumber((long)x));
 
 		}else if ((x >= 23 && x <= 25) && x != 18 && x != 13){
 			x -= 23;
-			push(s, initNumber(x));
+			push(s, initNumber((long)x));
 
 		} return 1;
 

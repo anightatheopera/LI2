@@ -130,7 +130,7 @@ void parse(char *line, Stack *s) {
 
     line = &(*rest);
     rest = NULL;
-    if (token == NULL || line[0] == '\0' || line[0] == '\n') line = NULL;
+    if (token == NULL || line[0] == '\0' || line[0] == '\n') { line = NULL; free(line); }
 
   }
 }
