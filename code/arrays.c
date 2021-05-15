@@ -73,7 +73,6 @@ void first_array (Stack *s, Types *y) {
     }
     push(s, initArray(array));
     push(s, x);
-    free(y);
 }
 
 /**
@@ -149,7 +148,6 @@ void range_array (Stack *s, Types *y) {
     array->var = s->var;
     for (int n = 0; n < y->number; n++) push(array, initNumber(n));
     push(s, initArray(array));
-    free(y);
 }
 
 /**

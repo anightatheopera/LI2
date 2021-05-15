@@ -45,8 +45,8 @@ void replicate_string (Stack *s, long y, Types *x) {
  */
 void first_string (Stack *s, Types *y) {
     char c = y->string[0];
-    y->string++;
-    push(s, y);
+    char *str = y->string++;
+    push(s, initString(str));
     push(s, initChar(c));
 }
 
@@ -91,6 +91,8 @@ void index_string (Stack *s, Types *y, Types *x) {
         if (y != NULL) i = y->number;
         push(s, initChar(x->string[i]));
     }
+    free(x);
+    free(y);
 }
 
 /**
@@ -116,8 +118,8 @@ void init_string (Stack *s, Types *y, Types *x) {
  * @param x String inicial
  */
 void tail_string (Stack *s, Types *y, Types *x) {
-    x->string += ((int)strlen(x->string)-y->number);
-    push(s, x);
+    char *new = x->string + ((int)strlen(x->string)-y->number);
+    push(s, initString(new));
 }
 
 
@@ -130,7 +132,7 @@ void tail_string (Stack *s, Types *y, Types *x) {
  */
 void break_string (Stack *s, Types *y, Types *x) {
     if (x->type == string){
-        Stack* st = stackinit(100);
+        Stack* st = stackinit(10);
         st->var = s->var;
         char* begin = strdup(x->string);
         char* end;

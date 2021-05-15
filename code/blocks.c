@@ -123,13 +123,13 @@ void filter_array (Stack *s, char *block, Stack *n) {
     Stack *array = stackinit(n->size);
     array->var = s->var;
     
-    for (long i = 0; i<(n->size); i++) {
+    for (int i = 0; i<(n->size); i++) {
         Stack *s2 = stackinit(10);
         s2->var = s->var;
+        Types* y = copy_value(s, n->values[i]);
         push(s2, n->values[i]);
         exec_block(s2, block);
-        Types *y = s2->values[0];
-        if (y->number == 1) push(array, n->values[i]);
+        if (truthy(s2->values[0]) == 1) push(array,y);
         free(s2);
     }
 
@@ -170,7 +170,6 @@ void fold_array (Stack *s, char *block, Stack *n) {
         free(x);
     }
     push(s, s2->values[0]);
-    free(y);
     free(s2);
     free(n);
 }

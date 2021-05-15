@@ -81,14 +81,20 @@ int plus_ops(Stack *s, char *token){
 		if (x->type == array && y->type == array) cat_array(s, y, x);
 		else if (x->type == array || y->type == array) add_array(s, y, x);
 		else if (y->type == array) { push (y->array, x); push (s, y);	}
-		else if (y->type == floats)
-			push(s, initFloat(y->floats + x->floats));
 		else if (y->type == string)
 			cat_string(s, y, x);
-		else if (y->type == single)
+		else if (y->type == floats) {
+			push(s, initFloat(y->floats + x->floats));
+			free(x);
+		} else if (y->type == single) {
 			push(s, initChar(y->single + x->single));
-		else if (y->type == number)
+			free(x);
+		} else if (y->type == number) {
 			push(s, initNumber(y->number + x->number));
+			free(x);
+		}
+
+		free(y);
 		return 1;
     }
     else return 0;
@@ -116,6 +122,9 @@ int minus_ops(Stack *s, char *token) {
 			push(s, initFloat(x->floats - y->floats));
 		else if (y->type == single)
 			push(s, initChar(x->single - y->single));
+		
+		free(y);
+		free(x);
 
 		return 1;
 
@@ -149,6 +158,9 @@ int mult_ops(Stack *s, char *token){
 			push(s, initFloat(y->floats * x->floats));
 		else if (y->type == single)
 			push(s, initChar(y->single * x->single));
+		
+		free(y);
+		free(x);
 
 		return 1;
 		
@@ -178,6 +190,9 @@ int div_ops(Stack *s, char *token){
 		else if (y->type == single)
 			push(s, initChar(x->single / y->single));
 		else if (y->type == string) break_string(s, y, x);
+
+		free(y);
+		free(x);
 		
 		return 1;
 
@@ -207,6 +222,9 @@ int mod_ops(Stack *s, char *token){
 			push(s, initNumber(x->number % y->number));
 		else if (y->type == single)
 			push(s, initChar(x->single % y->single));
+		
+		free(y);
+		free(x);
 
 		return 1;
 
@@ -232,6 +250,7 @@ int inc_ops(Stack *s, char *token){
 			push(s, initChar(y->single-1));
 		else if (y->type == string) first_string(s, y);
 		else if (y->type == array) first_array(s, y);
+		free(y);
 
 		return 1;
 	} else return 0;
@@ -255,7 +274,8 @@ int dec_ops(Stack *s, char *token){
 		else if (y->type == single)
 			push(s, initChar(y->single+1));
 		else if (y->type == string) last_string(s, y);
-		else if (y->type == array) last_array(s, y);		
+		else if (y->type == array) last_array(s, y);
+		
 		return 1;
 
 	} else return 0;
@@ -284,6 +304,9 @@ int pow_ops(Stack *s, char *token){
 		else if (y->type == single)
 			push(s, initChar(pow (x->single, y->single)));
 		else if (y->type == string) substring(s, y, x);
+
+		free(x);
+		free(y);
 	
 		return 1;
 	
@@ -311,6 +334,9 @@ int and_ops(Stack *s, char *token){
 			push(s, initNumber(y->number & x->number));
 		else if (y->type == single)
 			push(s, initChar(y->single & x->single));
+
+		free(x);
+		free(y);
 
 		return 1;
 	
@@ -341,6 +367,8 @@ int xor_ops(Stack *s, char *token){
 		else if (y->type == single)
 			push(s, initChar(y->single ^ x->single));
 
+		free(x);
+		free(y);
 		return 1;
 
 	} else return 0;
@@ -399,6 +427,8 @@ int or_ops(Stack *s, char *token){
 		else if (y->type == single)
 			push(s, initChar(y->single | x->single));
 
+		free(x);
+		free(y);
 		return 1;
 
 	} else return 0;
@@ -452,7 +482,8 @@ int double_ops(Stack *s, char *token){
  */
 int pop_ops(Stack *s, char *token){
 	if (strcmp (token, ";") == 0) {
-		pop(s);
+		Types *x = pop(s);
+		free(x);
 		return 1;
 
 	} else return 0;
@@ -835,7 +866,8 @@ int eq(Stack *s, char *token){
 			 }
 		converte (maxt->type, mint);
 		push(s, initNumber(equal_op(y, x)));
-
+		free(x);
+		free(y);
 		return 1;
 	
 	} else return 0;
@@ -907,12 +939,14 @@ int lesser(Stack *s, char *token){
 			init_string(s, y, x); return 1; 
 		}
 		else if (y->type == number && x->type == array){
-				init_array(s, y, x); return 1;
+			init_array(s, y, x); return 1;
 		}
 		Types *maxt = max_type(x, y);
 		Types *mint = min_type(x, y);
 		converte (maxt->type, mint);
 		push(s, initNumber(less_op(y, x)));
+		free(x);
+		free(y);
 
 		return 1;
 	} else return 0;
@@ -938,6 +972,8 @@ int bigger(Stack *s, char *token){
 		if(y->number && x->string) tail_string(s, y, x);
 		else if (y->number && x->array) tail_array(s, y, x);
 		else push(s, initNumber(big_op(y, x)));
+		free(x);
+		free(y);
 
 		return 1;
 	
@@ -960,6 +996,7 @@ int not(Stack *s, char *token){
 		if (y->type == number) push(s, initNumber(! y->number));
 		else if (y->type == single) push(s, initNumber(! y->single));
 		else if (y->type == floats) push(s, initNumber(! y->floats));
+		free(y);
 		return 1;
 
 	} else return 0;
@@ -1122,6 +1159,7 @@ int range (Stack *s, char *token){
 		
 		else if (y->array)
 			push(s, initNumber(y->array->size));
+		free(y);
 
 		return 1;
 
@@ -1193,7 +1231,7 @@ int white_space (Stack *s, char *token){
 			if(strlen(begin) != 0) push(st, initString(begin));
 			push(s, initArray(st));
 		}
-		
+		free(y);
 		return 1;
 	}
 	else return 0;
@@ -1222,6 +1260,7 @@ int newlines (Stack *s, char *token){
 			if(strlen(begin) != 0) push(st, initString(begin));
 			push(s, initArray(st));
 		}
+		free(y);
 		
 		return 1;
 	}
